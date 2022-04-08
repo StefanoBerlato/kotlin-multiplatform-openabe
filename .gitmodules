@@ -1,0 +1,3 @@
+[submodule "openabeWrapper/openabe"]
+	path = openabeWrapper/openabe
+	url = https://github.com/StefanoBerlato/openabe

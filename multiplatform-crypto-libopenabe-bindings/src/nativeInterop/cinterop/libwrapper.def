@@ -1,0 +1,5 @@
+headers = wrapper.h
+staticLibraries = libwrapper.a
+libraryPaths = ../openabeWrapper/wrapper/
+compilerOpts = -I../openabeWrapper/wrapper/
+linkerOpts = -z muldefs

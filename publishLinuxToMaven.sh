@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./gradlew publishJvmPublicationToSnapshotRepository \
+publishKotlinMultiplatformPublicationToSnapshotRepository publishLinuxX64PublicationToSnapshotRepository

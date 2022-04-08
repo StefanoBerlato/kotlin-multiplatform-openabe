@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="multiplatform-crypto-libopenabe-bindings-jvm-0.0.1-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/multiplatform-crypto-libopenabe-bindings/build/libs</output-path>
+    <root id="archive" name="multiplatform-crypto-libopenabe-bindings-jvm-0.0.1-SNAPSHOT.jar">
+      <element id="module-output" name="KotlinMultiplatformLibopenabe.multiplatform-crypto-libopenabe-bindings.jvmMain" />
+    </root>
+  </artifact>
+</component>

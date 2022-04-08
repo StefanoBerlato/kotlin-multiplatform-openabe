@@ -1,0 +1,1 @@
+../mpn/x86_64/core2/rsh1aors_n.asm
