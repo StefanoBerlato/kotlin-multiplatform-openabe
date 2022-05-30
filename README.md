@@ -5,16 +5,17 @@ A wrapper allowing to easily use the [OpenABE](https://github.com/zeutro/openabe
 
 ## Warning
 
-The development jusy started (04/2022), thus the wrapper is still incomplete and potentially with bugs and vulnerabilities. Feel free to open an issue or contact me directly for more information or for contributing.
+The development just started (04/2022), thus the wrapper is still incomplete and potentially with bugs and vulnerabilities. Feel free to open an issue or contact me directly for more information or for contributing.
 
 
 ## Status
 
 Currently, bindings are available for a small portion of the APIs offered by OpenABE:
-* the main utility functions in `openabe.h` (e.g., initialization, shutdown);
-* the `OpenABECryptoContext` class in `zcrypto_box.h`.
+* the main utility functions in `openabe.h` (i.e., `InitializeOpenABE()`, `InitializeOpenABEwithoutOpenSSL()`, `ShutdownOpenABE()`, `AssertLibInit()`);
+* the `OpenABECryptoContext` and `OpenPKEContext` classes in `zcrypto_box.h`;
+* the `OpenABESymKeyHandleImpl` class in `zsymcrypto.h`.
 
-At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, the bindings for the linuxX64 native target present incorrect behaviour for some inputs (e.g., decrypting a ciphertext previously encrypted with two attributes with an AND gate fails). 
+At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, the bindings for the linuxX64 native target present incorrect behaviour for some inputs (e.g., decrypting a ciphertext previously encrypted with two attributes with an AND gate fails).
 
 
 ## Installation
@@ -66,7 +67,7 @@ LibopenabeInitializer.initializeWithCallback {
     oabe.keygen("|attr1|attr2", "key0")
 
     /** Encrypt under the access structure 'attr1 and attr2' */
-    val plaintext = "The Legend of Vox Machina"
+    val plaintext = "Hello! I'm using Kotlin Multiplatform OpenABE."
     val ciphertext = oabe.encrypt("attr1 and attr2", plaintext)
 
     /** Decrypt specifying the key ID */

@@ -1,0 +1,9 @@
+Dabe/zcontextcca.cpp:decrypt:613: 'Error occurred during decryption'
+:abe/zcontextabe.cpp:decrypt:377: 'Invalid function input'
+	8OpenABECryptoContext::decrypt: Invalid curve identifier
+
+%Found Key: 'key0' => '|attr1|attr2|'
+Cpke/zcontextpke.cpp:decrypt:695: 'Missing the sender's public key'
+,OpenABEContainer::getComponent: missing 'a'
+Nterminate called after throwing an instance of 'N4oabe19ZCryptoBoxExceptionE'
+<  what():  importPrivateKey: Element not found in container

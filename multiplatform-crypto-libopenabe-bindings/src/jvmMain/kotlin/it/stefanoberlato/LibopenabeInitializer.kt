@@ -20,16 +20,26 @@ actual object LibopenabeInitializer {
                     //SharedLibraryLoader.get().load("dynamic-linux-arm64-libopenabe.so", JnaLibopenabeInterface::class.java)
                     throw RuntimeException("Unsupported platform") // TODO add support
                 } else {
-                    SharedLibraryLoader.get()
-                        .load("dynamic-linux-x86-64-libgmp.so", JnaLibopenabeInterface::class.java)
-                    SharedLibraryLoader.get()
-                        .load("dynamic-linux-x86-64-librelic.so", JnaLibopenabeInterface::class.java)
-                    SharedLibraryLoader.get()
-                        .load("dynamic-linux-x86-64-librelic_ec.so", JnaLibopenabeInterface::class.java)
-                    SharedLibraryLoader.get()
-                        .load("dynamic-linux-x86-64-libopenabe.so", JnaLibopenabeInterface::class.java)
-                    SharedLibraryLoader.get()
-                        .load("dynamic-linux-x86-64-libwrapper.so", JnaLibopenabeInterface::class.java)
+                    SharedLibraryLoader.get().load(
+                        "dynamic-linux-x86-64-libgmp.so",
+                        JnaLibopenabeInterface::class.java
+                    )
+                    SharedLibraryLoader.get().load(
+                        "dynamic-linux-x86-64-librelic.so",
+                        JnaLibopenabeInterface::class.java
+                    )
+                    SharedLibraryLoader.get().load(
+                        "dynamic-linux-x86-64-librelic_ec.so",
+                        JnaLibopenabeInterface::class.java
+                    )
+                    SharedLibraryLoader.get().load(
+                        "dynamic-linux-x86-64-libopenabe.so",
+                        JnaLibopenabeInterface::class.java
+                    )
+                    SharedLibraryLoader.get().load(
+                        "dynamic-linux-x86-64-libwrapper.so",
+                        JnaLibopenabeInterface::class.java
+                    )
                 }
             }
             Platform.isWindows() -> {
@@ -51,7 +61,10 @@ actual object LibopenabeInitializer {
             //Native.load("openabe", JnaLibopenabeInterface::class.java) as JnaLibopenabeInterface
             throw RuntimeException("Unsupported platform") // TODO add support
         } else {
-            Native.load(libraryFile.absolutePath, JnaLibopenabeInterface::class.java) as JnaLibopenabeInterface
+            Native.load(
+                libraryFile.absolutePath,
+                JnaLibopenabeInterface::class.java
+            ) as JnaLibopenabeInterface
         }
 
         return library

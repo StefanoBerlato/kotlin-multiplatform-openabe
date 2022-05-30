@@ -1,11 +1,13 @@
 # Design
 
-This document contains notes and information on the design of the wrapper for OpenABE.
+This document contains notes and information on the design of the Kotlin multiplatform bindings for OpenABE.
 
 
 ## The C Wrapper
 
-As explained in the [documentation](https://kotlinlang.org/docs/native-overview.html#interoperability) for Kotlin Native (and as discussed in other issues as well, e.g., [1](https://discuss.kotlinlang.org/t/cinterop-with-c/18810), [2](https://youtrack.jetbrains.com/issue/KT-39144)), Kotlin can interop with `C` functions only. As the header of OpenABE exposes `C++` functions, we created a `C++` wrapper for OpenABE exposing `C` functions only in the header. The `C++` wrapper is located at `openabeWrapper/wrapper/`.
+As explained in the Kotlin Native [documentation](https://kotlinlang.org/docs/native-overview.html#interoperability), and as discussed in some issues as well (e.g., [1](https://discuss.kotlinlang.org/t/cinterop-with-c/18810), [2](https://youtrack.jetbrains.com/issue/KT-39144)), Kotlin can interop with `C` functions only. Thus, the library for which you are creating the bindings should expose `C` (not `C++`) functions only. 
+
+As the header of OpenABE exposes also `C++` functions, we created a `C++` wrapper for OpenABE exposing `C` functions only in the header. The `C++` wrapper is located at `openabeWrapper/wrapper/`.
 
 
 ## Modules
@@ -23,6 +25,7 @@ This project contains the following modules. Please refer to the READMEs of each
   * `makeOpenABE${arch}.sh`: build the static and shared libraries of OpenABE (in `openabe/root/lib/`) and the static and shared libraries of the dependencies (in `openabe/deps/root/lib/`) with the Konan toolchain of Kotlin for `<arch>`;
   * `makeGMP${arch}.sh.sh`: build the GMP library with the Konan toolchain of Kotlin for `<arch>`;
   * `makeWrapper${arch}.sh.sh`: build the static and shared libraries of the wrapper (in `wrapper/`) for `<arch>`. The wrapper static library includes the needed dependencies, while the wrapper shared library relies on other shared libraries. The wrapper exposes `C` functions only in the header;
+* `linuxBuildLinuxX86-64WithCacheNoTests.sh`: builds the bindings for OpenABE for Linux x86-64 assuming that OpenABE and gmp libraries were already built and excluding test tasks;
 * `linuxBuildLinuxX86-64.sh`: builds the bindings for OpenABE for Linux x86-64;
 * `publishToMavenLocal.sh`: publish to Maven local;
 * `publishLinuxToMaven.sh`: publish to the Maven repository.
@@ -53,7 +56,7 @@ The OpenABE library is build from sources at [my forked repository](https://gith
 
 ## TODOs:
 * Need to revise (the version of) other dependencies of OpenABE besides OpenSSL;
-* Complete wrapper and exposed APIs;
+* Complete bindings and exposed APIs;
 * Add support for other targets (native, Android, JS);
 
 

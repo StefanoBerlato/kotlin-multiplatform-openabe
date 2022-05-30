@@ -1,0 +1,65 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../multiplatform-crypto-libopenabe-bindings/0.0.12-SNAPSHOT/multiplatform-crypto-libopenabe-bindings-0.0.12-SNAPSHOT.module",
+    "group": "it.stefanoberlato",
+    "module": "multiplatform-crypto-libopenabe-bindings",
+    "version": "0.0.12-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.1.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "linuxX64ApiElements-published",
+      "attributes": {
+        "artifactType": "org.jetbrains.kotlin.klib",
+        "org.gradle.category": "library",
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.native.target": "linux_x64",
+        "org.jetbrains.kotlin.platform.type": "native"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.6.20"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-test-common",
+          "version": {
+            "requires": "1.6.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "multiplatform-crypto-libopenabe-bindings.klib",
+          "url": "multiplatform-crypto-libopenabe-bindings-linuxx64-0.0.12-SNAPSHOT.klib",
+          "size": 31607,
+          "sha512": "414b60b33b3097480851684ee15adf7ec047c3d09999236aa4111587be0d76a0ee92e0926dac768513da37fcfef94b23ace280d2d37f48d61f93ef5252499407",
+          "sha256": "911e98d7fb4de7ddb148e86f9031c7db09e8361ca608dbeb4bc858c185a9a36c",
+          "sha1": "51418e06637ab01f5ed13a9481bd4fdb1e406248",
+          "md5": "48cbb1ebd01c3fd17b4d1c9d07e762d0"
+        },
+        {
+          "name": "multiplatform-crypto-libopenabe-bindings-cinterop-libwrapperCinterop.klib",
+          "url": "multiplatform-crypto-libopenabe-bindings-linuxx64-0.0.12-SNAPSHOT-cinterop-libwrapperCinterop.klib",
+          "size": 11902794,
+          "sha512": "334d1c5f868236e7ad1750d7d526037cf623af49ef15bf8cd9c0088a184f7aa84f38280b88757a0420f66dbdf3905684723285e0bd6851ff7c715e28cb84763e",
+          "sha256": "2628fd1abaa795c0a89f5f7b354a15efd12ae0861c17db5e74c47625e6021e1c",
+          "sha1": "2c8d9c8912269ebff80a56b2b72c31a969c8cfff",
+          "md5": "c45663a639a254263da68355f3c66a5c"
+        }
+      ]
+    }
+  ]
+}

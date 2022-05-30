@@ -1,15 +1,18 @@
 package it.stefanoberlato.oabe
 
-import it.stefanoberlato.SchemeID
+import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
 import kotlinx.cinterop.*
 
 actual typealias OpenABECryptoContextObject = cnames.structs.openABECryptoContext
 
-actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64encode: Boolean) {
+actual class OpenABECryptoContext actual constructor(
+    schemeID: SchemeID,
+    base64encode: Boolean
+) {
     
     actual val context: OpenABECryptoContextObject =
         libwrapper.openABECryptoContext_create(
-            scheme_id = schemeID.toString(),
+            schemeID = schemeID.toString(),
             base64encode = base64encode
         )!!.pointed
 
@@ -61,9 +64,7 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
             encInput = encInput,
             plaintext = plaintext
         )
-        return pointerToCiphertext!!.toKString().also {
-            libwrapper.freeString(pointerToCiphertext)
-        }
+        return cloneDeallocAndReturn(pointerToCiphertext!!)
     }
 
     actual fun decrypt(
@@ -76,11 +77,10 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
+            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
-                State.Success -> pointerToPlaintext!!.toKString().also {
-                    libwrapper.freeString(pointerToPlaintext)
-                }
-                State.DecryptionError -> throw OpenABECryptoContextDecrypt()
+                State.Success -> returnedValue
+                State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
                 else -> throw OpenABECryptoContextRunTime()
             }
         }
@@ -98,11 +98,10 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
+            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
-                State.Success -> pointerToPlaintext!!.toKString().also {
-                    libwrapper.freeString(pointerToPlaintext)
-                }
-                State.DecryptionError -> throw OpenABECryptoContextDecrypt()
+                State.Success -> returnedValue
+                State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
                 else -> throw OpenABECryptoContextRunTime()
             }
         }
@@ -113,9 +112,7 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
         val pointerToParams = libwrapper.openABECryptoContext_exportPublicParams(
             m = context.ptr
         )
-        return pointerToParams!!.toKString().also {
-            libwrapper.freeString(pointerToParams)
-        }
+        return cloneDeallocAndReturn(pointerToParams!!)
     }
 
     actual fun exportSecretParams(): String {
@@ -123,21 +120,25 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
         val pointerToParams = libwrapper.openABECryptoContext_exportSecretParams(
             m = context.ptr
         )
-        return pointerToParams!!.toKString().also {
-            libwrapper.freeString(pointerToParams)
-        }
+        return cloneDeallocAndReturn(pointerToParams!!)
     }
 
     actual fun exportUserKey(
         keyID: String
     ): String {
         checkPreconditions()
-        val pointerToKey = libwrapper.openABECryptoContext_exportUserKey(
-            m = context.ptr,
-            keyID = keyID
-        )
-        return pointerToKey!!.toKString().also {
-            libwrapper.freeString(pointerToKey)
+        return IntArray(1).usePinned { pinned ->
+            val pointerToKey = libwrapper.openABECryptoContext_exportUserKey(
+                m = context.ptr,
+                keyID = keyID,
+                errorCode = pinned.addressOf(0)
+            )
+            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            when (State.fromInt(pinned.get()[0])) {
+                State.Success -> returnedValue
+                State.ABEExportKeyError -> throw OpenABECryptoContextExportKey(returnedValue)
+                else -> throw OpenABECryptoContextRunTime()
+            }
         }
     }
 
@@ -204,7 +205,7 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
             )
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> { }
-                State.DeleteKeyError -> throw OpenABECryptoContextKeyDelete()
+                State.ABEDeleteKeyError -> throw OpenABECryptoContextKeyDelete()
                 else -> throw OpenABECryptoContextRunTime()
             }
         }

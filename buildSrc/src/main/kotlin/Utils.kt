@@ -22,18 +22,24 @@ fun getHostArchitecture(): String {
     return resolvedArch
 }
 
-fun KotlinMultiplatformExtension.isRunningInIdea(block: KotlinMultiplatformExtension.() -> Unit) {
+fun KotlinMultiplatformExtension.isRunningInIdea(
+    block: KotlinMultiplatformExtension.() -> Unit
+) {
     if (isInIdea()) {
         block(this)
     }
 }
 
-fun KotlinMultiplatformExtension.runningOnLinuxx86_64(block: KotlinMultiplatformExtension.() -> Unit) {
+fun KotlinMultiplatformExtension.runningOnLinuxx86_64(
+    block: KotlinMultiplatformExtension.() -> Unit
+) {
     if (getHostOsName() == "linux" && getHostArchitecture() == "x86-64") {
         block(this)
     }
 }
 
-fun independentDependencyBlock(nativeDeps: KotlinDependencyHandler.() -> Unit): KotlinDependencyHandler.() -> Unit {
+fun independentDependencyBlock(
+    nativeDeps: KotlinDependencyHandler.() -> Unit
+): KotlinDependencyHandler.() -> Unit {
     return nativeDeps
 }

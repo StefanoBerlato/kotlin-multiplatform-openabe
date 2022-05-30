@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="it.stefanoberlato.LibopenabeInitializerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-05-30T15:35:36" hostname="sberlato" time="0.1">
+  <properties/>
+  <testcase name="test library initialization[jvm]" classname="it.stefanoberlato.LibopenabeInitializerTest" time="0.1"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#noProviders for further details.
+]]></system-err>
+</testsuite>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-05-30T15:35:37" hostname="sberlato" time="0.005">
+  <properties/>
+  <testcase name="decrypt tampered ciphertext fails[jvm]" classname="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" time="0.002"/>
+  <testcase name="decrypt with a different key fails[jvm]" classname="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" time="0.001"/>
+  <testcase name="export key works[jvm]" classname="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" time="0.0"/>
+  <testcase name="encrypt and decrypt with the same key works[jvm]" classname="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" time="0.001"/>
+  <testcase name="export raw key works[jvm]" classname="it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

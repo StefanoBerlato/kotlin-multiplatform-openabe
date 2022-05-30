@@ -1,6 +1,7 @@
 package it.stefanoberlato.oabe
 
 import it.stefanoberlato.LibopenabeInitializer.openabeJna
+import it.stefanoberlato.PointerTypeString
 
 actual object LibopenabeUtil {
 
@@ -18,5 +19,11 @@ actual object LibopenabeUtil {
 
     actual fun assertLibInit() {
         openabeJna.AssertLibInit()
+    }
+
+    fun cloneDeallocAndReturn(pointer: PointerTypeString) : String {
+        val clonedString = "" + pointer.string
+        pointer.free()
+        return clonedString
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="it.stefanoberlato.oabe.OpenABECryptoContextTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2022-05-30T15:35:36" hostname="sberlato" time="0.111">
+  <properties/>
+  <testcase name="two oabe contexts have different parameters[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.013"/>
+  <testcase name="decrypt with no key ID without enabling the key manager first fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.015"/>
+  <testcase name="enable key manager and delete user key without importing it first works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.002"/>
+  <testcase name="import and export params works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.004"/>
+  <testcase name="enable key manager and import key and decrypt with no key ID works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.008"/>
+  <testcase name="export user key without importing it first fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.002"/>
+  <testcase name="import key without enabling the key manager first works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.003"/>
+  <testcase name="decrypt with unauthorized key fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.007"/>
+  <testcase name="import user key and export user key works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.003"/>
+  <testcase name="invoke any function after destroy fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.002"/>
+  <testcase name="invoke any function before generating parameters fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.002"/>
+  <testcase name="decrypt tampered ciphertext with authorized key fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.016"/>
+  <testcase name="import user key and delete user key works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.003"/>
+  <testcase name="encrypt and decrypt with authorized key works[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.007"/>
+  <testcase name="enable key manager and not import key and decrypt with no key ID fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.01"/>
+  <testcase name="encrypt and decrypt with non existing key fails[jvm]" classname="it.stefanoberlato.oabe.OpenABECryptoContextTest" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

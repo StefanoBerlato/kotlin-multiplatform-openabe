@@ -1,8 +1,8 @@
 #include "wrapper.h"
 
-#include <iostream>
 #include <string>
 #include <cassert>
+#include <stdint.h>
 #include <openabe/openabe.h>
 #include <openabe/zsymcrypto.h>
 
@@ -17,7 +17,7 @@ void freeString(
 ) {
     free(stringToFree);
 }
-// ========== end of 0 ==========
+// ========== end of 0. ==========
 
 
 
@@ -38,7 +38,7 @@ void ShutdownOpenABE() {
 void AssertLibInit() {
     oabe::AssertLibInit();
 }
-// ========== end of 1 ==========
+// ========== end of 1. ==========
 
 
 
@@ -49,14 +49,14 @@ struct openABECryptoContext {
 };
 
 openABECryptoContext_t *openABECryptoContext_create(
-    const char * scheme_id,
+    const char * schemeID,
     bool base64encode
 ) {
 	openABECryptoContext_t *m;
 	OpenABECryptoContext *obj;
 
 	m      = (typeof(m))malloc(sizeof(*m));
-	obj    = new OpenABECryptoContext(scheme_id, base64encode);
+	obj    = new OpenABECryptoContext(schemeID, base64encode);
 	m->obj = obj;
 
 	return m;
@@ -118,41 +118,65 @@ const char * openABECryptoContext_encrypt(
 	return strdup(buffer.c_str());
 }
 
+// If an error occurs, set the proper error code
+// and return an error message describing the error
 const char * openABECryptoContext_decryptWithKeyID(
     openABECryptoContext_t *m,
     const char * keyID,
     const char * ciphertext,
     int * errorCode
 ) {
-	OpenABECryptoContext *obj;
-    string buffer;
-	obj = static_cast<OpenABECryptoContext *>(m->obj);
-	bool result = obj->decrypt(keyID, ciphertext, buffer);
-	if (result) {
-	    errorCode[0] = Success;
-		return strdup(buffer.c_str());
-	} else {
-	    errorCode[0] = DecryptionError;
-        return NULL;
-	}
+    try {
+        OpenABECryptoContext *obj;
+        string buffer;
+        obj = static_cast<OpenABECryptoContext *>(m->obj);
+        bool result = obj->decrypt(keyID, ciphertext, buffer);
+        if (result) {
+            errorCode[0] = Success;
+            return strdup(buffer.c_str());
+        } else {
+            errorCode[0] = ABEDecryptionError;
+            return strdup("Error during ABE decryption, probably the"
+                   " ciphertext corrupted or the key does not satisfy the policy");
+        }
+	} catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = ABEDecryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = ABEDecryptionError;
+         return strdup("ABE decryptWithKeyID: unknown exception");
+     }
 }
 
+// If an error occurs, set the proper error code
+// and return an error message describing the error
 const char * openABECryptoContext_decrypt(
     openABECryptoContext_t *m,
     const char * ciphertext,
     int * errorCode
 ) {
-	OpenABECryptoContext *obj;
-    string buffer;
-    obj = static_cast<OpenABECryptoContext *>(m->obj);
-    bool result = obj->decrypt(ciphertext, buffer);
-	if (result) {
-	    errorCode[0] = Success;
-		return strdup(buffer.c_str());
-	} else {
-	    errorCode[0] = DecryptionError;
-        return NULL;
-	}
+    try {
+        OpenABECryptoContext *obj;
+        string buffer;
+        obj = static_cast<OpenABECryptoContext *>(m->obj);
+        bool result = obj->decrypt(ciphertext, buffer);
+        if (result) {
+            errorCode[0] = Success;
+            return strdup(buffer.c_str());
+        } else {
+            errorCode[0] = ABEDecryptionError;
+            return strdup("Error during ABE decryption, probably the"
+                   " ciphertext corrupted or the key does not satisfy the policy");
+        }
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = ABEDecryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = ABEDecryptionError;
+         return strdup("ABE decrypt: unknown exception");
+     }
 }
 
 const char * openABECryptoContext_exportPublicParams(
@@ -175,15 +199,28 @@ const char * openABECryptoContext_exportSecretParams(
   	return strdup(buffer.c_str());
 }
 
+// If an error occurs, set the proper error code
+// and return an error message describing the error
 const char * openABECryptoContext_exportUserKey(
     openABECryptoContext_t *m,
-    const char * keyID
+    const char * keyID,
+    int * errorCode
 ) {
-    OpenABECryptoContext *obj;
-    string buffer;
-    obj = static_cast<OpenABECryptoContext *>(m->obj);
-    obj->exportUserKey(keyID, buffer);
-    return strdup(buffer.c_str());
+    try {
+        OpenABECryptoContext *obj;
+        string buffer;
+        obj = static_cast<OpenABECryptoContext *>(m->obj);
+        obj->exportUserKey(keyID, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = ABEExportKeyError;
+        string exceptionMessage(ex.what());
+        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = ABEExportKeyError;
+         return strdup("ABE exportUserKey: unknown exception");
+     }
 }
 
 void openABECryptoContext_importPublicParams(
@@ -224,7 +261,7 @@ void openABECryptoContext_deleteKey(
     if (obj->deleteKey(keyID)) {
         errorCode[0] = Success;
     } else {
-        errorCode[0] = DeleteKeyError;
+        errorCode[0] = ABEDeleteKeyError;
     }
 }
 
@@ -285,4 +322,289 @@ void openABECryptoContext_importGlobalParams(
     obj->importGlobalParams(keyBlob);
 }
 */
-// ========== end of 2 ==========
+// ========== end of 2. ==========
+
+
+
+// 3. ========== openPKEContext ==========
+struct openPKEContext {
+	void *obj;
+};
+
+openPKEContext_t *openPKEContext_create(
+    const char * ecID,
+    bool base64encode
+) {
+	openPKEContext_t *m;
+	OpenPKEContext *obj;
+
+	m      = (typeof(m))malloc(sizeof(*m));
+	obj    = new OpenPKEContext(ecID, base64encode);
+	m->obj = obj;
+
+	return m;
+}
+
+void openPKEContext_destroy(
+    openPKEContext_t *m
+) {
+	delete static_cast<OpenPKEContext *>(m->obj);
+	free(m);
+}
+
+const char * openPKEContext_exportPublicKey(
+    openPKEContext_t *m,
+    const char * keyID,
+    int * errorCode
+) {
+    try {
+        OpenPKEContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKEContext *>(m->obj);
+        obj->exportPublicKey(keyID, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+  	} catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKEExportKeyError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+        errorCode[0] = PKEExportKeyError;
+        return strdup("PKE exportPublicKey: unknown exception");
+    }
+}
+
+const char * openPKEContext_exportPrivateKey(
+    openPKEContext_t *m,
+    const char * keyID,
+    int * errorCode
+) {
+    try {
+  	    OpenPKEContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKEContext *>(m->obj);
+        obj->exportPrivateKey(keyID, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKEExportKeyError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+        errorCode[0] = PKEExportKeyError;
+        return strdup("PKE exportPrivateKey: unknown exception");
+    }
+}
+
+void openPKEContext_importPublicKey(
+    openPKEContext_t *m,
+    const char * keyID,
+    const char * keyBlob
+) {
+  	OpenPKEContext *obj;
+    obj = static_cast<OpenPKEContext *>(m->obj);
+  	obj->importPublicKey(keyID, keyBlob);
+}
+
+void openPKEContext_importPrivateKey(
+    openPKEContext_t *m,
+    const char * keyID,
+    const char * keyBlob
+) {
+  	OpenPKEContext *obj;
+    obj = static_cast<OpenPKEContext *>(m->obj);
+  	obj->importPrivateKey(keyID, keyBlob);
+}
+
+void openPKEContext_keygen(
+    openPKEContext_t *m,
+    const char * keyID
+) {
+  	OpenPKEContext *obj;
+    obj = static_cast<OpenPKEContext *>(m->obj);
+  	obj->keygen(keyID);
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKEContext_encrypt(
+    openPKEContext_t *m,
+    const char * receiverID,
+    const char * plaintext,
+    int * errorCode
+) {
+    try {
+        OpenPKEContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKEContext *>(m->obj);
+        bool result = obj->encrypt(receiverID, plaintext, buffer);
+        if (result) {
+            errorCode[0] = Success;
+            return strdup(buffer.c_str());
+        } else {
+            errorCode[0] = PKEEncryptionError;
+            return strdup("Error during PKE encryption");
+        }
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKEEncryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = PKEEncryptionError;
+         return strdup("PKE encrypt: unknown exception");
+     }
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKEContext_decrypt(
+    openPKEContext_t *m,
+    const char * receiverID,
+    const char * ciphertext,
+    int * errorCode
+) {
+    try {
+        OpenPKEContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKEContext *>(m->obj);
+        bool result = obj->decrypt(receiverID, ciphertext, buffer);
+        if (result) {
+            errorCode[0] = Success;
+            return strdup(buffer.c_str());
+        } else {
+            errorCode[0] = PKEDecryptionError;
+            return strdup("Error during PKE decryption");
+        }
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKEDecryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+        errorCode[0] = PKEDecryptionError;
+        return strdup("PKE decrypt: unknown exception");
+    }
+}
+// ========== end of 3. ==========
+
+
+
+// 4. ========== openABESymKeyHandleImpl ==========
+struct openABESymKeyHandleImpl {
+	void *obj;
+};
+
+openABESymKeyHandleImpl_t *openABESymKeyHandleImpl_create(
+    char * keyBytes,
+    int keyBytesLen,
+    bool apply_b64_encode
+) {
+	openABESymKeyHandleImpl_t *m;
+	OpenABESymKeyHandleImpl *obj;
+
+	m      = (typeof(m))malloc(sizeof(*m));
+	std::string keyString(keyBytes, keyBytesLen);
+	obj    = new OpenABESymKeyHandleImpl(keyString, apply_b64_encode);
+	m->obj = obj;
+
+	return m;
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openABESymKeyHandleImpl_encrypt(
+    openABESymKeyHandleImpl_t *m,
+    const char * plaintext,
+    int * errorCode
+) {
+    try {
+        OpenABESymKeyHandleImpl *obj;
+        string buffer;
+        obj = static_cast<OpenABESymKeyHandleImpl *>(m->obj);
+        obj->encrypt(buffer, plaintext);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = SymEncryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("Sym ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = SymEncryptionError;
+         return strdup("Sym encrypt: unknown exception");
+     }
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openABESymKeyHandleImpl_decrypt(
+    openABESymKeyHandleImpl_t *m,
+    const char * ciphertext,
+    int * errorCode
+) {
+    try {
+        OpenABESymKeyHandleImpl *obj;
+        string buffer;
+        obj = static_cast<OpenABESymKeyHandleImpl *>(m->obj);
+        obj->decrypt(buffer, ciphertext);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = SymDecryptionError;
+        string exceptionMessage(ex.what());
+        return strdup(("Sym ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = SymDecryptionError;
+         return strdup("Sym decrypt: unknown exception");
+     }
+}
+
+const char * openABESymKeyHandleImpl_exportRawKey(
+    openABESymKeyHandleImpl_t *m
+) {
+    OpenABESymKeyHandleImpl *obj;
+    string buffer;
+    obj = static_cast<OpenABESymKeyHandleImpl *>(m->obj);
+    obj->exportRawKey(buffer);
+    return strdup(buffer.c_str());
+}
+
+const char * openABESymKeyHandleImpl_exportKey(
+    openABESymKeyHandleImpl_t *m
+) {
+    OpenABESymKeyHandleImpl *obj;
+    string buffer;
+    obj = static_cast<OpenABESymKeyHandleImpl *>(m->obj);
+    obj->exportKey(buffer);
+    return strdup(buffer.c_str());
+}
+// ========== end of 4. ==========
+
+
+
+// 4.1. ========== zsymcrypto ==========
+const char * zsymcrypto_generateSymmetricKey(
+    int keyLen
+) {
+    string buffer;
+    generateSymmetricKey(buffer, ((unsigned int) keyLen));
+    return strdup(buffer.c_str());
+}
+
+// Original documentation says: "For debug purposes only!!"
+const char * zsymcrypto_printAsHex(
+    const char * binBuf
+) {
+    string result = oabe::crypto::printAsHex(binBuf);
+    return strdup(result.c_str());
+}
+// ========== end of 4.1. ==========
+
+
+
+// TODO delete
+int getLength(
+    char * keyBytes
+) {
+    return sizeof(keyBytes);
+}
+// TODO delete
+

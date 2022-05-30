@@ -3,6 +3,8 @@ package it.stefanoberlato
 import com.sun.jna.Library
 import com.sun.jna.PointerType
 import it.stefanoberlato.oabe.OpenABECryptoContextObject
+import it.stefanoberlato.oabe.OpenPKEContextObject
+import it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplObject
 
 /**
  * Class corresponding to char arrays dynamically allocated
@@ -17,12 +19,24 @@ class PointerTypeString : PointerType() {
         get() = this.pointer.getString(0)
 }
 
-
+/**
+ * 0. My Utilities - wrapper utility functions
+ * 1. OpenABE Utilities - functions defined in 'openabe.h'
+ * 2. openABECryptoContext - functions defined in 'zcrypto_box.h' for the openABECryptoContext class
+ * 3. openPKEContext - functions defined in 'zcrypto_box.h' for the OpenPKEContext class
+ * 4. openABESymKeyHandleImpl - functions defined in 'zsymcrypto.h' for the OpenABESymKeyHandleImpl class
+ * 4.1. zsymcrypto - functions defined in 'zsymcrypto.h'
+ */
 interface JnaLibopenabeInterface : Library {
 
+    // 0. ========== My Utilities ==========
     //  void freeString(char * string)
     fun freeString(pointerTypeString: PointerTypeString)
+    // ========== end of 0. ==========
 
+    
+    
+    // 1. ========== OpenABE Utilities ==========
     //  void InitializeOpenABE()
     fun InitializeOpenABE()
 
@@ -34,9 +48,11 @@ interface JnaLibopenabeInterface : Library {
 
     //  void AssertLibInit()
     fun AssertLibInit()
+    // ========== end of 1. ==========
 
+    // 2. ========== openABECryptoContext ==========
     //  openABECryptoContext_t *openABECryptoContext_create(
-    //      const char * scheme_id,
+    //      const char * schemeID,
     //      bool base64encode
     //  )
     fun openABECryptoContext_create(
@@ -102,7 +118,6 @@ interface JnaLibopenabeInterface : Library {
     //      openABECryptoContext_t *m,
     //      const char * ciphertext,
     //      int * errorCode,
-    //      errorCode: IntArray
     //  )
     fun openABECryptoContext_decrypt(
         openABECryptoContextObject: OpenABECryptoContextObject,
@@ -126,11 +141,13 @@ interface JnaLibopenabeInterface : Library {
 
     //  const char * openABECryptoContext_exportUserKey(
     //      openABECryptoContext_t *m,
-    //      const char * keyID
+    //      const char * keyID,
+    //      int * errorCode,
     //  )
     fun openABECryptoContext_exportUserKey(
         openABECryptoContextObject: OpenABECryptoContextObject,
-        keyID: String
+        keyID: String,
+        errorCode: IntArray
     ): PointerTypeString
 
     //  void openABECryptoContext_enableKeyManager(
@@ -188,4 +205,182 @@ interface JnaLibopenabeInterface : Library {
         keyID: String,
         errorCode: IntArray
     )
+    // ========== end of 2. ==========
+    
+    
+    
+    // 3. ========== openPKEContext ==========
+    //  openPKEContext_t *openPKEContext_create(
+    //      const char * ecID,
+    //      bool base64encode
+    //  )
+    fun openPKEContext_create(
+        ecID: String,
+        base64encode: Boolean
+    ): OpenPKEContextObject
+
+    //  void openPKEContext_destroy(
+    //      openPKEContext_t *m
+    //  )
+    fun openPKEContext_destroy(
+        openPKEContextObject: OpenPKEContextObject
+    )
+
+
+    // const char * openPKEContext_exportPublicKey(
+    //     openPKEContext_t *m, 
+    //     const char * keyID,
+    //     int * errorCode
+    // )
+    fun openPKEContext_exportPublicKey(
+        openPKEContextObject: OpenPKEContextObject,
+        keyID: String,
+        errorCode: IntArray
+    ): PointerTypeString
+    
+    
+    // const char * openPKEContext_exportPrivateKey(
+    //     openPKEContext_t *m, 
+    //     const char * keyID
+    //     int * errorCode
+    // )
+    fun openPKEContext_exportPrivateKey(
+        openPKEContextObject: OpenPKEContextObject,
+        keyID: String,
+        errorCode: IntArray
+    ): PointerTypeString
+    
+    // void openPKEContext_importPublicKey(
+    //     openPKEContext_t *m, 
+    //     const char * keyID, 
+    //     const char * keyBlob
+    // )
+    fun openPKEContext_importPublicKey(
+        openPKEContextObject: OpenPKEContextObject,
+        keyID: String,
+        keyBlob: String,
+    )
+    
+    // void openPKEContext_importPrivateKey(
+    //     openPKEContext_t *m, 
+    //     const char * keyID, 
+    //     const char * keyBlob
+    // )
+    fun openPKEContext_importPrivateKey(
+        openPKEContextObject: OpenPKEContextObject,
+        keyID: String,
+        keyBlob: String,
+    )
+    
+    // void openPKEContext_keygen(
+    //     openPKEContext_t *m, 
+    //     const char * keyID
+    // )
+    fun openPKEContext_keygen(
+        openPKEContextObject: OpenPKEContextObject,
+        keyID: String
+    )
+    
+    // const char * openPKEContext_encrypt(
+    //     openPKEContext_t *m, 
+    //     const char * receiverID, 
+    //     const char * plaintext, 
+    //     int * errorCode
+    // )
+    fun openPKEContext_encrypt(
+        openPKEContextObject: OpenPKEContextObject,
+        receiverID: String,
+        plaintext: String,
+        errorCode: IntArray
+    ): PointerTypeString
+    
+    // const char * openPKEContext_decrypt(
+    //     openPKEContext_t *m, 
+    //     const char * receiverID, 
+    //     const char * ciphertext, 
+    //     int * errorCode
+    // )
+    fun openPKEContext_decrypt(
+        openPKEContextObject: OpenPKEContextObject,
+        receiverID: String,
+        ciphertext: String,
+        errorCode: IntArray
+    ): PointerTypeString
+    // ========== end of 3. ==========
+
+
+
+    // 4. ========== openABESymKeyHandleImpl ==========
+    //  openABESymKeyHandleImpl_t *openABESymKeyHandleImpl_create(
+    //      const char * keyBytes,
+    //      int keyBytesLen,
+    //      bool apply_b64_encode
+    //  )
+    fun openABESymKeyHandleImpl_create(
+        keyBytes: ByteArray,
+        keyBytesLen: Int,
+        apply_b64_encode: Boolean
+    ): OpenABESymKeyHandleImplObject
+
+    // const char * openABESymKeyHandleImpl_encrypt(
+    //     openABESymKeyHandleImpl_t *m,
+    //     const char * plaintext,
+    //     int * errorCode
+    // )
+    fun openABESymKeyHandleImpl_encrypt(
+        openABESymKeyHandleImplObject: OpenABESymKeyHandleImplObject,
+        plaintext: String,
+        errorCode: IntArray
+    ): PointerTypeString
+
+
+    // const char * openABESymKeyHandleImpl_decrypt(
+    //     openABESymKeyHandleImpl_t *m,
+    //     const char * ciphertext,
+    //     int * errorCode
+    // )
+    fun openABESymKeyHandleImpl_decrypt(
+        openABESymKeyHandleImplObject: OpenABESymKeyHandleImplObject,
+        ciphertext: String,
+        errorCode: IntArray
+    ): PointerTypeString
+
+    // const char * exportRawKey(
+    //     openABESymKeyHandleImpl_t *m
+    // )
+    fun openABESymKeyHandleImpl_exportRawKey(
+        openABESymKeyHandleImplObject: OpenABESymKeyHandleImplObject,
+    ): PointerTypeString
+
+    // const char * exportKey(
+    //     openABESymKeyHandleImpl_t *m
+    // )
+    fun openABESymKeyHandleImpl_exportKey(
+        openABESymKeyHandleImplObject: OpenABESymKeyHandleImplObject,
+    ): PointerTypeString
+    // ========== end of 4 ==========
+
+
+    // 4.1. ========== zsymcrypto ==========
+    // const char * zsymcrypto_generateSymmetricKey(
+    //     int keyLen
+    // )
+    fun zsymcrypto_generateSymmetricKey(
+        keyLen: Int,
+    ): PointerTypeString
+
+    // const char * zsymcrypto_printAsHex(
+    //     const char * binBuf
+    // )
+    fun zsymcrypto_printAsHex(
+        binBuf: String,
+    ): PointerTypeString
+
+
+    // TODO delete
+    fun getLength(
+        keyBytes: ByteArray,
+    ): Int
+    // TODO delete
+    // ========== end of 4.1 ==========
 }

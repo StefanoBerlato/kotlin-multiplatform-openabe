@@ -3,7 +3,8 @@ package it.stefanoberlato.oabe
 import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
 import it.stefanoberlato.LibopenabeInitializer
-import it.stefanoberlato.SchemeID
+import it.stefanoberlato.PointerTypeString
+import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
 
 actual class OpenABECryptoContextObject : Structure() {
 
@@ -19,7 +20,10 @@ actual class OpenABECryptoContextObject : Structure() {
     var obj: PointerByReference? = null
 }
 
-actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64encode: Boolean) {
+actual class OpenABECryptoContext actual constructor(
+    schemeID: SchemeID,
+    base64encode: Boolean
+) {
 
     actual val context: OpenABECryptoContextObject =
         LibopenabeInitializer.openabeJna.openABECryptoContext_create(
@@ -77,9 +81,7 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
             encInput = encInput,
             plaintext = plaintext
         )
-        return pointerToCiphertext.string.apply {
-            pointerToCiphertext.free()
-        }
+        return cloneDeallocAndReturn(pointerToCiphertext)
     }
 
     actual fun decrypt(
@@ -92,11 +94,10 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
             ciphertext = ciphertext,
             errorCode = errorCode
         )
+        val returnedValue = cloneDeallocAndReturn(pointerToPlaintext)
         return when (State.fromInt(errorCode[0])) {
-            State.Success -> pointerToPlaintext.string.apply {
-                pointerToPlaintext.free()
-            }
-            State.DecryptionError -> throw OpenABECryptoContextDecrypt()
+            State.Success -> returnedValue
+            State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
             else -> throw OpenABECryptoContextRunTime()
         }
     }
@@ -113,11 +114,10 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
             ciphertext = ciphertext,
             errorCode = errorCode
         )
+        val returnedValue = cloneDeallocAndReturn(pointerToPlaintext)
         return when (State.fromInt(errorCode[0])) {
-            State.Success -> pointerToPlaintext.string.apply {
-                pointerToPlaintext.free()
-            }
-            State.DecryptionError -> throw OpenABECryptoContextDecrypt()
+            State.Success -> returnedValue
+            State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
             else -> throw OpenABECryptoContextRunTime()
         }
     }
@@ -127,9 +127,7 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
         val pointerToParams = LibopenabeInitializer.openabeJna.openABECryptoContext_exportPublicParams(
             openABECryptoContextObject = context
         )
-        return pointerToParams.string.apply {
-            pointerToParams.free()
-        }
+        return cloneDeallocAndReturn(pointerToParams)
     }
 
     actual fun exportSecretParams(): String {
@@ -137,21 +135,24 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
         val pointerToParams = LibopenabeInitializer.openabeJna.openABECryptoContext_exportSecretParams(
             openABECryptoContextObject = context
         )
-        return pointerToParams.string.apply {
-            pointerToParams.free()
-        }
+        return cloneDeallocAndReturn(pointerToParams)
     }
 
     actual fun exportUserKey(
         keyID: String
     ): String {
+        val errorCode = IntArray(1)
         checkPreconditions()
         val pointerToKey = LibopenabeInitializer.openabeJna.openABECryptoContext_exportUserKey(
             openABECryptoContextObject = context,
-            keyID = keyID
+            keyID = keyID,
+            errorCode = errorCode
         )
-        return pointerToKey.string.apply {
-            pointerToKey.free()
+        val returnedValue = cloneDeallocAndReturn(pointerToKey)
+        return when (State.fromInt(errorCode[0])) {
+            State.Success -> returnedValue
+            State.ABEExportKeyError -> throw OpenABECryptoContextExportKey(returnedValue)
+            else -> throw OpenABECryptoContextRunTime()
         }
     }
 
@@ -218,11 +219,13 @@ actual class OpenABECryptoContext actual constructor(schemeID: SchemeID, base64e
         )
         when (State.fromInt(errorCode[0])) {
             State.Success -> { }
-            State.DeleteKeyError -> throw OpenABECryptoContextKeyDelete()
+            State.ABEDeleteKeyError -> throw OpenABECryptoContextKeyDelete()
             else -> throw OpenABECryptoContextRunTime()
         }
         return true
     }
+
+
 
     private fun checkPreconditions(
         checkDestroyed: Boolean = true,

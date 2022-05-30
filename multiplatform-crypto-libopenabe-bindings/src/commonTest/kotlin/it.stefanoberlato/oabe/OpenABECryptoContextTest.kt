@@ -1,14 +1,13 @@
 package it.stefanoberlato.oabe
 
 import it.stefanoberlato.LibopenabeInitializer
-import it.stefanoberlato.SchemeID
 import it.stefanoberlato.testBlocking
 import kotlin.random.Random
 import kotlin.test.*
 
 class OpenABECryptoContextTest {
 
-    private val myPlaintext = "The Legend of Vox Machina"
+    private val myPlaintext = "Hello! I'm using Kotlin Multiplatform OpenABE."
 
     private var oabe: OpenABECryptoContext? = null
 
@@ -44,19 +43,19 @@ class OpenABECryptoContextTest {
 
     @Test
     fun `invoke any function before generating parameters fails`() {
-        val newOabe = OpenABECryptoContext(SchemeID.CP_ABE)
+        val newOABE = OpenABECryptoContext(SchemeID.CP_ABE)
         var thrown = false
         try {
-            newOabe.keygen("|attr1|attr2", "key0")
+            newOABE.keygen("|attr1|attr2", "key0")
         } catch (e: OpenABECryptoContextMissingParameters) {
             thrown = true
         }
-        newOabe.destroy()
+        newOABE.destroy()
         assertTrue(thrown)
     }
 
     @Test
-    fun `encrypt and decrypt with same key works`() {
+    fun `encrypt and decrypt with authorized key works`() {
         oabe!!.keygen("|attr1|attr2", "key0")
         val plaintext = myPlaintext
         val ciphertext = oabe!!.encrypt("attr1 and attr2", plaintext)
@@ -65,7 +64,7 @@ class OpenABECryptoContextTest {
     }
 
     @Test
-    fun `encrypt and decrypt with different key fails`() {
+    fun `decrypt with unauthorized key fails`() {
         oabe!!.keygen("|attr1", "key1")
 
         val plaintext = myPlaintext
@@ -81,7 +80,7 @@ class OpenABECryptoContextTest {
     }
 
     @Test
-    fun `encrypt and decrypt with not existing key fails`() {
+    fun `encrypt and decrypt with non existing key fails`() {
         oabe!!.keygen("|attr1|attr2", "key0")
 
         val plaintext = myPlaintext
@@ -97,7 +96,7 @@ class OpenABECryptoContextTest {
     }
 
     @Test
-    fun `encrypt and decrypt of tampered ciphertext with same key fails`() {
+    fun `decrypt tampered ciphertext with authorized key fails`() {
         oabe!!.keygen("|attr1|attr2", "key0")
 
         val plaintext = myPlaintext
@@ -140,36 +139,38 @@ class OpenABECryptoContextTest {
 
     @Test
     fun `decrypt with no key ID without enabling the key manager first fails`() {
-        // TODO throws a 'oabe::ZCryptoBoxException' but in the library, not in Kotlin
-        //  => You need to handle the C exception yourself and instead build a java
-        //  exception which can be passed to the java side of the code. Pass the
-        //  exception from C back to Kotlin as a multiple parameter
-        /*context!!.keygen("|attr1|attr2", "key0")
+        oabe!!.keygen("|attr1|attr2", "key0")
 
         val plaintext = myPlaintext
-        val ciphertext = context!!.encrypt("attr1 and attr2", plaintext)
+        val ciphertext = oabe!!.encrypt("attr1 and attr2", plaintext)
 
-        val keyBlob = context!!.exportUserKey("key0")
-        context!!.importUserKey("key0", keyBlob)
+        val keyBlob = oabe!!.exportUserKey("key0")
+        oabe!!.importUserKey("key0", keyBlob)
 
-        val decrypted = context!!.decrypt(ciphertext)
-        assertEquals(plaintext, decrypted)*/
+        var thrown = false
+        try {
+            oabe!!.decrypt(ciphertext)
+        } catch (e: OpenABECryptoContextDecrypt) {
+            thrown = true
+        }
+        assertTrue(thrown)
     }
 
     @Test
     fun `enable key manager and not import key and decrypt with no key ID fails`() {
-        // TODO throws a 'oabe::ZCryptoBoxException' but in the library, not in Kotlin
-        //  => You need to handle the C exception yourself and instead build a java
-        //  exception which can be passed to the java side of the code. Pass the
-        //  exception from C back to Kotlin as a multiple parameter
-        /*context!!.enableKeyManager("user1")
-        context!!.keygen("|attr1|attr2", "key0")
+        oabe!!.enableKeyManager("user1")
+        oabe!!.keygen("|attr1|attr2", "key0")
 
         val plaintext = myPlaintext
-        val ciphertext = context!!.encrypt("attr1 and attr2", plaintext)
+        val ciphertext = oabe!!.encrypt("attr1 and attr2", plaintext)
 
-        val decrypted = context!!.decrypt(ciphertext)
-        assertEquals(plaintext, decrypted)*/
+        var thrown = false
+        try {
+            oabe!!.decrypt(ciphertext)
+        } catch (e: OpenABECryptoContextDecrypt) {
+            thrown = true
+        }
+        assertTrue(thrown)
     }
 
     @Test
@@ -181,12 +182,14 @@ class OpenABECryptoContextTest {
 
     @Test
     fun `export user key without importing it first fails`() {
-        // TODO throws a 'oabe::ZCryptoBoxException' but in the library, not in Kotlin
-        //  => You need to handle the C exception yourself and instead build a java
-        //  exception which can be passed to the java side of the code. Pass the
-        //  exception from C back to Kotlin as a multiple parameter
-        /*context!!.enableKeyManager("user1")
-        val keyBlob = context!!.exportUserKey("key0")*/
+        oabe!!.enableKeyManager("user1")
+        var thrown = false
+        try {
+            oabe!!.exportUserKey("key0")
+        } catch (e: OpenABECryptoContextExportKey) {
+            thrown = true
+        }
+        assertTrue(thrown)
     }
 
     @Test
@@ -216,11 +219,11 @@ class OpenABECryptoContextTest {
     fun `two oabe contexts have different parameters`() {
         val mpk = oabe!!.exportPublicParams()
         val msk = oabe!!.exportSecretParams()
-        val newOabe = OpenABECryptoContext(SchemeID.CP_ABE)
-        newOabe.generateParams()
-        val mpk2 = newOabe.exportPublicParams()
-        val msk2 = newOabe.exportSecretParams()
-        newOabe.destroy()
+        val newOABE = OpenABECryptoContext(SchemeID.CP_ABE)
+        newOABE.generateParams()
+        val mpk2 = newOABE.exportPublicParams()
+        val msk2 = newOABE.exportSecretParams()
+        newOABE.destroy()
         assertNotEquals(mpk, mpk2)
         assertNotEquals(msk, msk2)
     }
@@ -229,20 +232,13 @@ class OpenABECryptoContextTest {
     fun `import and export params works`() {
         val mpk = oabe!!.exportPublicParams()
         val msk = oabe!!.exportSecretParams()
-        val newOabe = OpenABECryptoContext(SchemeID.CP_ABE)
-        newOabe.importPublicParams(mpk)
-        newOabe.importSecretParams(msk)
-        val mpk2 = newOabe.exportPublicParams()
-        val msk2 = newOabe.exportSecretParams()
-        newOabe.destroy()
+        val newOABE = OpenABECryptoContext(SchemeID.CP_ABE)
+        newOABE.importPublicParams(mpk)
+        newOABE.importSecretParams(msk)
+        val mpk2 = newOABE.exportPublicParams()
+        val msk2 = newOABE.exportSecretParams()
+        newOABE.destroy()
         assertEquals(mpk, mpk2)
         assertEquals(msk, msk2)
     }
 }
-
-
-/**
- * TODO TEST, but no sure if multi-authority ABE is enabled or not
- * void openABECryptoContext_importPublicParamsWithAuthID(openABECryptoContext_t *m, const char * authID, const char * keyBlob);
- * void openABECryptoContext_importSecretParamsWithAuthID(openABECryptoContext_t *m, const char * authID, const char * keyBlob);
- */

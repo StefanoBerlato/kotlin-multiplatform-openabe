@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
-val kotlin_version = "1.6.10"
+val kotlin_version = "1.6.20"
 
 plugins {
     kotlin(PluginsDeps.multiplatform)
@@ -247,9 +247,7 @@ publishing {
                 url.set("https://github.com/StefanoBerlato/kotlin-multiplatform-openabe")
                 connection.set("scm:git:git://git@github.com:StefanoBerlato/kotlin-multiplatform-openabe.git")
                 developerConnection.set("scm:git:ssh://git@github.com:StefanoBerlato/kotlin-multiplatform-openabe.git")
-
             }
-
         }
     }
     repositories {

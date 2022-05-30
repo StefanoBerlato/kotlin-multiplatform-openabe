@@ -11,10 +11,10 @@ set -e
 cd openabeWrapper
 
 # Build the OpenABE library for Linux x86_64
-./makeOpenABELinuxX86-64.sh # TODO uncomment if build from scratch
+./makeOpenABELinuxX86-64.sh
 
 # Build the gmp library for Linux x86_64
-./makeGMPLinuxX86-64.sh # TODO uncomment if build from scratch
+./makeGMPLinuxX86-64.sh
 
 # Build the wrapper for Linux x86_64
 ./makeWrapperLinuxX86-64.sh

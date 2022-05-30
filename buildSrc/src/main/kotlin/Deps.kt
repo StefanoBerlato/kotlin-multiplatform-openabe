@@ -1,6 +1,6 @@
 object Versions {
     const val kotlinCoroutines = "1.6.0-native-mt"
-    const val kotlin = "1.6.10"
+    const val kotlin = "1.6.20"
     const val nodePlugin = "1.3.0"
     const val dokkaPlugin = "1.5.0"
     const val taskTreePlugin = "1.5"

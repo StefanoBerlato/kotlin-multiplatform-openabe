@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>it.stefanoberlato</groupId>
+  <artifactId>multiplatform-crypto-libopenabe-bindings</artifactId>
+  <versioning>
+    <latest>0.0.12-SNAPSHOT</latest>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.12-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20220530154608</lastUpdated>
+  </versioning>
+</metadata>
