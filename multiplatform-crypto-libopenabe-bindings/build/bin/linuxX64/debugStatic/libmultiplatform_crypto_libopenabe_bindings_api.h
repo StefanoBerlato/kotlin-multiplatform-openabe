@@ -116,6 +116,27 @@ typedef struct {
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKEContextRunTime;
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextDestroyed;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextError;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextExportKey;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextRunTime;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextSign;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextVerify;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_SchemeID_CP_ABE;
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
@@ -155,6 +176,15 @@ typedef struct {
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_SymEncryptionError;
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_PKSIGExportKeyError;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_PKSIGSignError;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_PKSIGVerifyError;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_Companion;
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
@@ -165,6 +195,9 @@ typedef struct {
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplDecrypt;
+typedef struct {
+  libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
+} libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplDestroyed;
 typedef struct {
   libmultiplatform_crypto_libopenabe_bindings_KNativePtr pinned;
 } libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplEncrypt;
@@ -317,6 +350,45 @@ typedef struct {
             } OpenPKEContextRunTime;
             struct {
               libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext (*OpenPKSIGContext)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_ECID ecID, libmultiplatform_crypto_libopenabe_bindings_KBoolean base64encode);
+              void* (*get_context)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz);
+              libmultiplatform_crypto_libopenabe_bindings_KBoolean (*get_destroyed)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz);
+              void (*set_destroyed)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, libmultiplatform_crypto_libopenabe_bindings_KBoolean set);
+              void (*destroy)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz);
+              const char* (*exportPrivateKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID);
+              const char* (*exportPublicKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID);
+              void (*importPrivateKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID, const char* keyBlob);
+              void (*importPublicKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID, const char* keyBlob);
+              void (*keygen)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID);
+              const char* (*sign)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID, const char* message);
+              void (*verify)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContext thiz, const char* keyID, const char* message, const char* signature);
+            } OpenPKSIGContext;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextDestroyed (*OpenPKSIGContextDestroyed)(const char* message);
+            } OpenPKSIGContextDestroyed;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextError (*OpenPKSIGContextError)(const char* message);
+            } OpenPKSIGContextError;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextExportKey (*OpenPKSIGContextExportKey)(const char* message);
+            } OpenPKSIGContextExportKey;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextRunTime (*OpenPKSIGContextRunTime)(const char* message);
+            } OpenPKSIGContextRunTime;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextSign (*OpenPKSIGContextSign)(const char* message);
+            } OpenPKSIGContextSign;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+              libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_OpenPKSIGContextVerify (*OpenPKSIGContextVerify)(const char* message);
+            } OpenPKSIGContextVerify;
+            struct {
+              libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
               const char* (*toString)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_SchemeID thiz);
               struct {
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_SchemeID (*get)(); /* enum entry for CP_ABE. */
@@ -359,6 +431,15 @@ typedef struct {
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State (*get)(); /* enum entry for SymEncryptionError. */
               } SymEncryptionError;
               struct {
+                libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State (*get)(); /* enum entry for PKSIGExportKeyError. */
+              } PKSIGExportKeyError;
+              struct {
+                libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State (*get)(); /* enum entry for PKSIGSignError. */
+              } PKSIGSignError;
+              struct {
+                libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State (*get)(); /* enum entry for PKSIGVerifyError. */
+              } PKSIGVerifyError;
+              struct {
                 libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_Companion (*_instance)();
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State (*fromInt)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_State_Companion thiz, libmultiplatform_crypto_libopenabe_bindings_KInt value);
@@ -369,7 +450,10 @@ typedef struct {
                 libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl (*OpenABESymKeyHandleImpl)(libmultiplatform_crypto_libopenabe_bindings_kref_kotlin_ByteArray keyBytes, libmultiplatform_crypto_libopenabe_bindings_KBoolean applyB64Encode);
                 void* (*get_context)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz);
+                libmultiplatform_crypto_libopenabe_bindings_KBoolean (*get_destroyed)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz);
+                void (*set_destroyed)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz, libmultiplatform_crypto_libopenabe_bindings_KBoolean set);
                 const char* (*decrypt)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz, const char* ciphertext);
+                void (*destroy)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz);
                 const char* (*encrypt)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz, const char* plaintext);
                 const char* (*exportKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz);
                 const char* (*exportRawKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImpl thiz);
@@ -378,6 +462,10 @@ typedef struct {
                 libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplDecrypt (*OpenABESymKeyHandleImplDecrypt)(const char* message);
               } OpenABESymKeyHandleImplDecrypt;
+              struct {
+                libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
+                libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplDestroyed (*OpenABESymKeyHandleImplDestroyed)(const char* message);
+              } OpenABESymKeyHandleImplDestroyed;
               struct {
                 libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_OpenABESymKeyHandleImplEncrypt (*OpenABESymKeyHandleImplEncrypt)(const char* message);
@@ -394,7 +482,6 @@ typedef struct {
                 libmultiplatform_crypto_libopenabe_bindings_KType* (*_type)(void);
                 libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_Zsymcrypto (*_instance)();
                 libmultiplatform_crypto_libopenabe_bindings_kref_kotlin_ByteArray (*generateSymmetricKey)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_Zsymcrypto thiz, libmultiplatform_crypto_libopenabe_bindings_KInt keyLen);
-                libmultiplatform_crypto_libopenabe_bindings_KInt (*getLength)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_Zsymcrypto thiz, libmultiplatform_crypto_libopenabe_bindings_kref_kotlin_ByteArray a);
                 const char* (*printAsHex)(libmultiplatform_crypto_libopenabe_bindings_kref_it_stefanoberlato_oabe_crypto_Zsymcrypto thiz, const char* binBuf);
               } Zsymcrypto;
             } crypto;

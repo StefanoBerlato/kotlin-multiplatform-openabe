@@ -17,8 +17,4 @@ expect object Zsymcrypto {
      * function that it is "For debug purposes only!!"
      */
     fun printAsHex(binBuf: String): String
-
-    // TODO delete
-    fun getLength(a: ByteArray): Int
-    // TODO delete
 }

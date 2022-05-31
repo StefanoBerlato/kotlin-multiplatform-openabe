@@ -20,10 +20,4 @@ actual object Zsymcrypto {
         )
         return cloneDeallocAndReturn(pointerToKeyAsHex)
     }
-
-    // TODO delete
-    actual fun getLength(a: ByteArray): Int {
-        return LibopenabeInitializer.openabeJna.getLength(a)
-    }
-    // TODO delete
 }

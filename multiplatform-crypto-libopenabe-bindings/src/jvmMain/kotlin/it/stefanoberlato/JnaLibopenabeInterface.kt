@@ -4,6 +4,7 @@ import com.sun.jna.Library
 import com.sun.jna.PointerType
 import it.stefanoberlato.oabe.OpenABECryptoContextObject
 import it.stefanoberlato.oabe.OpenPKEContextObject
+import it.stefanoberlato.oabe.OpenPKSIGContextObject
 import it.stefanoberlato.oabe.crypto.OpenABESymKeyHandleImplObject
 
 /**
@@ -26,6 +27,7 @@ class PointerTypeString : PointerType() {
  * 3. openPKEContext - functions defined in 'zcrypto_box.h' for the OpenPKEContext class
  * 4. openABESymKeyHandleImpl - functions defined in 'zsymcrypto.h' for the OpenABESymKeyHandleImpl class
  * 4.1. zsymcrypto - functions defined in 'zsymcrypto.h'
+ * 5. openPKSIGContext - functions defined in 'zcrypto_box.h' for the OpenPKSIGContext class
  */
 interface JnaLibopenabeInterface : Library {
 
@@ -322,6 +324,13 @@ interface JnaLibopenabeInterface : Library {
         apply_b64_encode: Boolean
     ): OpenABESymKeyHandleImplObject
 
+    //  void openABESymKeyHandleImpl_destroy(
+    //      openABESymKeyHandleImpl_t *m
+    //  )
+    fun openABESymKeyHandleImpl_destroy(
+        openABESymKeyHandleImplObject: OpenABESymKeyHandleImplObject
+    )
+
     // const char * openABESymKeyHandleImpl_encrypt(
     //     openABESymKeyHandleImpl_t *m,
     //     const char * plaintext,
@@ -375,12 +384,106 @@ interface JnaLibopenabeInterface : Library {
     fun zsymcrypto_printAsHex(
         binBuf: String,
     ): PointerTypeString
+    // ========== end of 4.1. ==========
 
 
-    // TODO delete
-    fun getLength(
-        keyBytes: ByteArray,
-    ): Int
-    // TODO delete
-    // ========== end of 4.1 ==========
+
+    // 5. ========== openPKSIGContext ==========
+    //  openPKSIGContext_t *openPKSIGContext_create(
+    //      const char * ecID,
+    //      bool base64encode
+    //  )
+    fun openPKSIGContext_create(
+        ecID: String,
+        base64encode: Boolean
+    ): OpenPKSIGContextObject
+
+    //  void openPKSIGContext_destroy(
+    //      openPKSIGContext_t *m
+    //  )
+    fun openPKSIGContext_destroy(
+        openPKSIGContextObject: OpenPKSIGContextObject
+    )
+
+    // const char * openPKSIGContext_exportPublicKey(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     int * errorCode
+    // );
+    fun openPKSIGContext_exportPublicKey(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        errorCode: IntArray
+    ): PointerTypeString
+
+    // const char * openPKSIGContext_exportPrivateKey(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     int * errorCode
+    // );
+    fun openPKSIGContext_exportPrivateKey(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        errorCode: IntArray
+    ): PointerTypeString
+
+    // void openPKSIGContext_importPublicKey(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     const char * keyBlob
+    // );
+    fun openPKSIGContext_importPublicKey(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        keyBlob: String
+    )
+
+    // void openPKSIGContext_importPrivateKey(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     const char * keyBlob
+    // );
+    fun openPKSIGContext_importPrivateKey(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        keyBlob: String
+    )
+
+    // void openPKSIGContext_keygen(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID
+    // );
+    fun openPKSIGContext_keygen(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String
+    )
+
+    // const char * openPKSIGContext_sign(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     const char * message,
+    //     int * errorCode
+    // );
+    fun openPKSIGContext_sign(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        message: String,
+        errorCode: IntArray
+    ): PointerTypeString
+
+    // const char * openPKSIGContext_verify(
+    //     openPKSIGContext_t *m,
+    //     const char * keyID,
+    //     const char * message,
+    //     const char * signature,
+    //     int * errorCode
+    // );
+    fun openPKSIGContext_verify(
+        openPKSIGContextObject: OpenPKSIGContextObject,
+        keyID: String,
+        message: String,
+        signature: String,
+        errorCode: IntArray
+    ): PointerTypeString
+    // ========== end of 5 ==========
 }

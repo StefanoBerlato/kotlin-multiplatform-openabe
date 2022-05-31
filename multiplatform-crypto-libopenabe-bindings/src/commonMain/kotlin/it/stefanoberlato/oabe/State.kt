@@ -11,7 +11,10 @@ enum class State(val code: Int) {
     PKEDecryptionError(7),
     PKEExportKeyError(8),
     SymDecryptionError(9),
-    SymEncryptionError(10);
+    SymEncryptionError(10),
+    PKSIGExportKeyError(11),
+    PKSIGSignError(12),
+    PKSIGVerifyError(13);
 
     companion object {
         fun fromInt(value: Int) = values().first { it.code == value }

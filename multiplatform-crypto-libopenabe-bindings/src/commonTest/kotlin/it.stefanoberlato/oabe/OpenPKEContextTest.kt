@@ -28,11 +28,11 @@ class OpenPKEContextTest {
 
     @Test
     fun `invoke any function after destroy fails`() {
-        val newOabe = OpenPKEContext(ECID.NIST_P256)
-        newOabe.destroy()
+        val newOpke = OpenPKEContext(ECID.NIST_P256)
+        newOpke.destroy()
         var thrown = false
         try {
-            newOabe.keygen(keyID = "key0")
+            newOpke.keygen(keyID = "key0")
         } catch (e: OpenPKEContextDestroyed) {
             thrown = true
         }

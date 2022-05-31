@@ -509,6 +509,13 @@ openABESymKeyHandleImpl_t *openABESymKeyHandleImpl_create(
 	return m;
 }
 
+void openABESymKeyHandleImpl_destroy(
+    openABESymKeyHandleImpl_t *m
+) {
+	delete static_cast<OpenABESymKeyHandleImpl *>(m->obj);
+	free(m);
+}
+
 // If an error occurs, set the proper error code
 // and return an error message describing the error
 const char * openABESymKeyHandleImpl_encrypt(
@@ -554,7 +561,7 @@ const char * openABESymKeyHandleImpl_decrypt(
     } catch (...) {
          errorCode[0] = SymDecryptionError;
          return strdup("Sym decrypt: unknown exception");
-     }
+    }
 }
 
 const char * openABESymKeyHandleImpl_exportRawKey(
@@ -600,11 +607,163 @@ const char * zsymcrypto_printAsHex(
 
 
 
-// TODO delete
-int getLength(
-    char * keyBytes
+// 5. ========== openPKSIGContext ==========
+struct openPKSIGContext {
+	void *obj;
+};
+
+openPKSIGContext_t *openPKSIGContext_create(
+    const char * ecID,
+    bool base64encode
 ) {
-    return sizeof(keyBytes);
+	openPKSIGContext_t *m;
+	OpenPKSIGContext *obj;
+
+	m      = (typeof(m))malloc(sizeof(*m));
+	obj    = new OpenPKSIGContext(ecID, base64encode);
+	m->obj = obj;
+
+	return m;
 }
-// TODO delete
+
+void openPKSIGContext_destroy(
+    openPKSIGContext_t *m
+) {
+	delete static_cast<OpenPKSIGContext *>(m->obj);
+	free(m);
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKSIGContext_exportPublicKey(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    int * errorCode
+) {
+    try {
+        OpenPKSIGContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKSIGContext *>(m->obj);
+        obj->exportPublicKey(keyID, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKSIGExportKeyError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+        errorCode[0] = PKSIGExportKeyError;
+        return strdup("PKSIG exportPrivateKey: unknown exception");
+    }
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKSIGContext_exportPrivateKey(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    int * errorCode
+) {
+    try {
+        OpenPKSIGContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKSIGContext *>(m->obj);
+        obj->exportPrivateKey(keyID, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKSIGExportKeyError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+        errorCode[0] = PKSIGExportKeyError;
+        return strdup("PKSIG exportPrivateKey: unknown exception");
+    }
+}
+
+void openPKSIGContext_importPublicKey(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    const char * keyBlob
+) {
+    OpenPKSIGContext *obj;
+    obj = static_cast<OpenPKSIGContext *>(m->obj);
+    obj->importPublicKey(keyID, keyBlob);
+}
+
+void openPKSIGContext_importPrivateKey(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    const char * keyBlob
+) {
+    OpenPKSIGContext *obj;
+    obj = static_cast<OpenPKSIGContext *>(m->obj);
+    obj->importPrivateKey(keyID, keyBlob);
+}
+
+void openPKSIGContext_keygen(
+    openPKSIGContext_t *m,
+    const char * keyID
+) {
+    OpenPKSIGContext *obj;
+    obj = static_cast<OpenPKSIGContext *>(m->obj);
+  	obj->keygen(keyID);
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKSIGContext_sign(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    const char * message,
+    int * errorCode
+) {
+    try {
+        OpenPKSIGContext *obj;
+        string buffer;
+        obj = static_cast<OpenPKSIGContext *>(m->obj);
+        obj->sign(keyID, message, buffer);
+        errorCode[0] = Success;
+        return strdup(buffer.c_str());
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKSIGSignError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = PKSIGSignError;
+         return strdup("PKSIG sign: unknown exception");
+    }
+}
+
+// If an error occurs, set the proper error code
+// and return an error message describing the error
+const char * openPKSIGContext_verify(
+    openPKSIGContext_t *m,
+    const char * keyID,
+    const char * message,
+    const char * signature,
+    int * errorCode
+) {
+    try {
+        OpenPKSIGContext *obj;
+        obj = static_cast<OpenPKSIGContext *>(m->obj);
+        bool result = obj->verify(keyID, message, signature);
+        if (result) {
+            errorCode[0] = Success;
+            return strdup("Success");
+        } else {
+            errorCode[0] = PKSIGVerifyError;
+            return strdup("Error during PKSIG verify, probably the"
+                   " signature is not correct or the message was tampered");
+        }
+    } catch (const ZCryptoBoxException& ex) {
+        errorCode[0] = PKSIGVerifyError;
+        string exceptionMessage(ex.what());
+        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+    } catch (...) {
+         errorCode[0] = PKSIGVerifyError;
+         return strdup("PKSIG verify: unknown exception");
+     }
+}
+// ========== end of 5. ==========
 

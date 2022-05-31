@@ -17,6 +17,7 @@
 // 3. openPKEContext - functions defined in 'zcrypto_box.h' for the OpenPKEContext class
 // 4. openABESymKeyHandleImpl - functions defined in 'zsymcrypto.h' for the OpenABESymKeyHandleImpl class
 // 4.1. zsymcrypto - functions defined in 'zsymcrypto.h'
+// 5. openPKSIGContext - functions defined in 'zcrypto_box.h' for the OpenPKSIGContext class
 
 
 
@@ -33,6 +34,9 @@ enum State {
     PKEExportKeyError = 8,
     SymEncryptionError = 9,
     SymDecryptionError = 10,
+    PKSIGExportKeyError = 11,
+    PKSIGSignError = 12,
+    PKSIGVerifyError = 13,
 };
 void freeString(char * string);
 // ========== end of 0 ==========
@@ -110,6 +114,7 @@ struct openABESymKeyHandleImpl;
 typedef struct openABESymKeyHandleImpl openABESymKeyHandleImpl_t;
 
 openABESymKeyHandleImpl_t *openABESymKeyHandleImpl_create(char * keyBytes, int keyBytesLen, bool apply_b64_encode);
+void openABESymKeyHandleImpl_destroy(openABESymKeyHandleImpl_t *m);
 
 const char * openABESymKeyHandleImpl_encrypt(openABESymKeyHandleImpl_t *m, const char * plaintext, int * errorCode);
 const char * openABESymKeyHandleImpl_decrypt(openABESymKeyHandleImpl_t *m, const char * ciphertext, int * errorCode);
@@ -125,9 +130,28 @@ const char * zsymcrypto_generateSymmetricKey(int keyLen);
 const char * zsymcrypto_printAsHex(const char * binBuf);
 // ========== end of 4.1. ==========
 
-// TODO delete
-int getLength(char * keyBytes);
-// TODO delete
+
+
+// 5. ========== openPKSIGContext ==========
+struct openPKSIGContext;
+typedef struct openPKSIGContext openPKSIGContext_t;
+
+openPKSIGContext_t *openPKSIGContext_create(const char * ecID, bool base64encode);
+void openPKSIGContext_destroy(openPKSIGContext_t *m);
+
+const char * openPKSIGContext_exportPublicKey(openPKSIGContext_t *m, const char * keyID, int * errorCode);
+const char * openPKSIGContext_exportPrivateKey(openPKSIGContext_t *m, const char * keyID, int * errorCode);
+
+void openPKSIGContext_importPublicKey(openPKSIGContext_t *m, const char * keyID, const char * keyBlob);
+void openPKSIGContext_importPrivateKey(openPKSIGContext_t *m, const char * keyID, const char * keyBlob);
+
+void openPKSIGContext_keygen(openPKSIGContext_t *m, const char * keyID);
+
+const char * openPKSIGContext_sign(openPKSIGContext_t *m, const char * keyID, const char * message, int * errorCode);
+const char * openPKSIGContext_verify(openPKSIGContext_t *m, const char * keyID, const char * message, const char * signature, int * errorCode);
+// ========== end of 5. ==========
+
+
 
 #ifdef __cplusplus
     }

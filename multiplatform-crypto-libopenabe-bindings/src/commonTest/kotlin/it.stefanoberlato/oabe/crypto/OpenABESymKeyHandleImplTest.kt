@@ -23,6 +23,25 @@ class OpenABESymKeyHandleImplTest {
         osym = OpenABESymKeyHandleImpl(key!!)
     }
 
+    @AfterTest
+    fun tearDown() {
+        osym!!.destroy()
+    }
+
+    @Test
+    fun `invoke any function after destroy fails`() {
+        val newKey = Zsymcrypto.generateSymmetricKey(32)
+        val newOsym = OpenABESymKeyHandleImpl(newKey)
+        newOsym.destroy()
+        var thrown = false
+        try {
+            newOsym.exportKey()
+        } catch (e: OpenABESymKeyHandleImplDestroyed) {
+            thrown = true
+        }
+        assertTrue(thrown)
+    }
+
     @Test
     fun `encrypt and decrypt with the same key works`() {
         val plaintext = myPlaintext

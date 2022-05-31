@@ -12,7 +12,7 @@ The development just started (04/2022), thus the wrapper is still incomplete and
 
 Currently, bindings are available for a small portion of the APIs offered by OpenABE:
 * the main utility functions in `openabe.h` (i.e., `InitializeOpenABE()`, `InitializeOpenABEwithoutOpenSSL()`, `ShutdownOpenABE()`, `AssertLibInit()`);
-* the `OpenABECryptoContext` and `OpenPKEContext` classes in `zcrypto_box.h`;
+* the `OpenABECryptoContext`, `OpenPKEContext` and `OpenPKSIGContext` classes in `zcrypto_box.h`;
 * the `OpenABESymKeyHandleImpl` class in `zsymcrypto.h`.
 
 At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, the bindings for the linuxX64 native target present incorrect behaviour for some inputs (e.g., decrypting a ciphertext previously encrypted with two attributes with an AND gate fails).
