@@ -24,7 +24,7 @@ At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, t
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
-implementation("it.stefanoberlato:multiplatform-crypto-libopenabe-bindings:0.0.12-SNAPSHOT")
+implementation("it.stefanoberlato:multiplatform-crypto-libopenabe-bindings:0.0.13-SNAPSHOT")
 ```
 
 ## Usage
