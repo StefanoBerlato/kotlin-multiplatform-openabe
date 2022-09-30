@@ -154,11 +154,11 @@ interface JnaLibopenabeInterface : Library {
 
     //  void openABECryptoContext_enableKeyManager(
     //      openABECryptoContext_t *m,
-    //      const char * userId
+    //      const char * userID
     //  )
     fun openABECryptoContext_enableKeyManager(
         openABECryptoContextObject: OpenABECryptoContextObject,
-        userId: String
+        userID: String
     )
 
     //  void openABECryptoContext_enableVerbose(

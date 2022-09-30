@@ -13,10 +13,8 @@ class OpenPKSIGContextTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-        if (!LibopenabeInitializer.isInitialized()) {
-            testBlocking {
-                LibopenabeInitializer.initialize()
-            }
+        testBlocking {
+            LibopenabeInitializer.initialize()
         }
         osig = OpenPKSIGContext(ECID.NIST_P256)
     }
@@ -24,6 +22,9 @@ class OpenPKSIGContextTest {
     @AfterTest
     fun tearDown() {
         osig!!.destroy()
+        testBlocking {
+            LibopenabeInitializer.shutdown()
+        }
     }
 
     @Test
@@ -200,10 +201,10 @@ class OpenPKSIGContextTest {
         osig!!.keygen(keyID = "public_A")
         val keyBlobPA = osig!!.exportPublicKey(keyID = "public_A")
         val keyBlobSA = osig!!.exportPrivateKey(keyID = "public_A")
-        osig!!.importPublicKey(keyID = "public_B", keyBlob = keyBlobPA)
-        osig!!.importPrivateKey(keyID = "public_B", keyBlob = keyBlobSA)
-        assertEquals(keyBlobPA, osig!!.exportPublicKey(keyID = "public_B"))
-        assertEquals(keyBlobSA, osig!!.exportPrivateKey(keyID = "public_B"))
+        osig!!.importPublicKey(keyID = "public_A", keyBlob = keyBlobPA)
+        osig!!.importPrivateKey(keyID = "public_A", keyBlob = keyBlobSA)
+        assertEquals(keyBlobPA, osig!!.exportPublicKey(keyID = "public_A"))
+        assertEquals(keyBlobSA, osig!!.exportPrivateKey(keyID = "public_A"))
     }
 
 

@@ -5,17 +5,17 @@ A wrapper allowing to easily use the [OpenABE](https://github.com/zeutro/openabe
 
 ## Warning
 
-The development just started (04/2022), thus the wrapper is still incomplete and potentially with bugs and vulnerabilities. Feel free to open an issue or contact me directly for more information or for contributing.
+The bindings are still being developed, thus the wrapper is incomplete and may potentially contain bugs and vulnerabilities. Feel free to open an issue or contact me directly for more information or for contributing.
 
 
 ## Status
 
-Currently, bindings are available for a small portion of the APIs offered by OpenABE:
+Currently, bindings are available for a portion of the APIs offered by OpenABE:
 * the main utility functions in `openabe.h` (i.e., `InitializeOpenABE()`, `InitializeOpenABEwithoutOpenSSL()`, `ShutdownOpenABE()`, `AssertLibInit()`);
 * the `OpenABECryptoContext`, `OpenPKEContext` and `OpenPKSIGContext` classes in `zcrypto_box.h`;
 * the `OpenABESymKeyHandleImpl` class in `zsymcrypto.h`.
 
-At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, the bindings for the linuxX64 native target present incorrect behaviour for some inputs (e.g., decrypting a ciphertext previously encrypted with two attributes with an AND gate fails).
+At the moment, supported targets are JVM (linuxX64) and linuxX64.
 
 
 ## Installation
@@ -24,7 +24,7 @@ At the moment, the supported targets are JVM (linuxX64) and linuxX64. However, t
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
-implementation("it.stefanoberlato:multiplatform-crypto-libopenabe-bindings:0.0.13-SNAPSHOT")
+implementation("it.stefanoberlato:multiplatform-crypto-libopenabe-bindings:0.0.15-SNAPSHOT")
 ```
 
 ## Usage
@@ -84,6 +84,16 @@ LibopenabeInitializer.initializeWithCallback {
 ```
 
 The `decrypt` function will throw a `OpenABECryptoContextDecrypt` exception if the ciphertext cannot be decrypted (because, e.g., the key does not embed the necessary attributes or the ciphertext was tampered with).
+
+Finally, you can de-initialize the library.
+
+```kotlin
+suspend fun shutdownOpenABE() {
+    ...
+    LibopenabeInitializer.shutdown()
+    ...
+}
+```
 
 
 ## Thanks

@@ -1,5 +1,10 @@
 package it.stefanoberlato.oabe.crypto
 
+/**
+ * This is a wrapper class exposing the
+ * functionalities of the corresponding
+ * Zsymcrypto object in OpenABE.
+ */
 expect object Zsymcrypto {
 
     // TODO
@@ -10,6 +15,10 @@ expect object Zsymcrypto {
     //      OpenABEByteString& output_key);
     //  """
 
+    /**
+     * Generate a symmetric key of length [keyLen]
+     * (ideally a random sequence of [keyLen] bytes)
+     */
     fun generateSymmetricKey(keyLen: Int): ByteArray
 
     /**

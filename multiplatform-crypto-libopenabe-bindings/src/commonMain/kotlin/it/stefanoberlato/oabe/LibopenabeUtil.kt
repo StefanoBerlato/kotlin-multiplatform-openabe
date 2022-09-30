@@ -1,5 +1,10 @@
 package it.stefanoberlato.oabe
 
+/**
+ * This is a wrapper class exposing the
+ * functionalities for initializing and
+ * shutting down the OpenABE library.
+ */
 expect object LibopenabeUtil {
     fun initializeOpenABE()
     fun initializeOpenABEWithoutOpenSSL()

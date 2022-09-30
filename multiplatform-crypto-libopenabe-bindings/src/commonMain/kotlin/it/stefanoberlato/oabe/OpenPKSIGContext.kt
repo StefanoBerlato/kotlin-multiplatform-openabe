@@ -50,6 +50,7 @@ expect class OpenPKSIGContextObject
  * This is a wrapper class exposing the
  * functionalities of the corresponding
  * OpenPKSIGContext class in OpenABE.
+ * [ecID] can only be [NIST_P256].
  * If you do not have a good reason, leave
  * the [base64encode] argument to 'true'
  */
@@ -58,6 +59,9 @@ expect class OpenPKSIGContext(
     base64encode: Boolean = true
 ) {
 
+    /**
+     * The (handle to the PKSIG object) context
+     */
     val context: OpenPKSIGContextObject
 
     /**
@@ -66,38 +70,75 @@ expect class OpenPKSIGContext(
      */
     var destroyed: Boolean
 
+    /**
+     * Destroy the context and free the memory
+     */
     fun destroy()
 
-    fun exportPublicKey(
-        keyID: String
-    ): String
-
-    fun exportPrivateKey(
-        keyID: String
-    ): String
-
-    fun importPublicKey(
-        keyID: String,
-        keyBlob: String
-    )
-
-    fun importPrivateKey(
-        keyID: String,
-        keyBlob: String
-    )
-
+    /**
+     * Generate a PKSIG key with the given [keyID] (arbitrary
+     * string that is appended to the key blob. Therefore, a
+     * key, once created, must always have the same key ID, even
+     * when imported elsewhere)
+     */
     fun keygen(
         keyID: String
     )
 
+    /**
+     * Sign the given [message] with the given
+     * [keyID], and return the signature
+     */
     fun sign(
         keyID: String,
         message: String
     ): String
 
+    /**
+     * Verify the [signature] for the [message] with
+     * the given [keyID]
+     */
     fun verify(
         keyID: String,
         message: String,
         signature: String
+    )
+
+    /**
+     * Export the PKSIG public key with
+     * the specified [keyID]
+     */
+    fun exportPublicKey(
+        keyID: String
+    ): String
+
+    /**
+     * Export the PKSIG private key with
+     * the specified [keyID]
+     */
+    fun exportPrivateKey(
+        keyID: String
+    ): String
+
+    /**
+     * Import a PKSIG public key [keyBlob] with
+     * the specified [keyID] (which must
+     * be the same with which the key was
+     * generated)
+     */
+    fun importPublicKey(
+        keyID: String,
+        keyBlob: String
+    )
+
+    /**
+     * Import a PKSIG private key [keyBlob] with
+     * the specified [keyID] (which must
+     * be the same with which the key was
+     * generated)
+     */
+    fun importPrivateKey(
+        keyID: String,
+        keyBlob: String
     )
 }

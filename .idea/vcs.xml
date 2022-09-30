@@ -4,6 +4,7 @@
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/openabeWrapper/openabe" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/openabeWrapper/openabe/deps/flex/flex-2.6.4.git" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/openabeWrapper/openabe/deps/openssl/openssl-1.1.1-dev.git" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/openabeWrapper/openabe/deps/openssl/openssl-1.1.1-stable.git" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/openabeWrapper/openabe/deps/relic/relic-toolkit-0.5.0.git" vcs="Git" />

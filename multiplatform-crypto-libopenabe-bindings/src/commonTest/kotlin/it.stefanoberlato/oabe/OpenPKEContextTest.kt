@@ -13,10 +13,8 @@ class OpenPKEContextTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-        if (!LibopenabeInitializer.isInitialized()) {
-            testBlocking {
-                LibopenabeInitializer.initialize()
-            }
+        testBlocking {
+            LibopenabeInitializer.initialize()
         }
         opke = OpenPKEContext(ECID.NIST_P256)
     }
@@ -24,6 +22,9 @@ class OpenPKEContextTest {
     @AfterTest
     fun tearDown() {
         opke!!.destroy()
+        testBlocking {
+            LibopenabeInitializer.shutdown()
+        }
     }
 
     @Test
@@ -164,9 +165,9 @@ class OpenPKEContextTest {
         opke!!.keygen(keyID = "public_A")
         val keyBlobPA = opke!!.exportPublicKey(keyID = "public_A")
         val keyBlobSA = opke!!.exportPrivateKey(keyID = "public_A")
-        opke!!.importPublicKey(keyID = "public_B", keyBlob = keyBlobPA)
-        opke!!.importPrivateKey(keyID = "public_B", keyBlob = keyBlobSA)
-        assertEquals(keyBlobPA, opke!!.exportPublicKey(keyID = "public_B"))
-        assertEquals(keyBlobSA, opke!!.exportPrivateKey(keyID = "public_B"))
+        opke!!.importPublicKey(keyID = "public_A", keyBlob = keyBlobPA)
+        opke!!.importPrivateKey(keyID = "public_A", keyBlob = keyBlobSA)
+        assertEquals(keyBlobPA, opke!!.exportPublicKey(keyID = "public_A"))
+        assertEquals(keyBlobSA, opke!!.exportPrivateKey(keyID = "public_A"))
     }
 }

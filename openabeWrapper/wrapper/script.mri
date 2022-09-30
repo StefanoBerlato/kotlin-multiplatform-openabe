@@ -1,19 +1,15 @@
 create libwrapper.a
 
-* Add other deps .a that OpenABE does not build
-addlib ../gmp/gmp-6.2.1/linux-x86-64/lib/libgmp.a
-
 * Add OpenABE deps .a
+addlib ../openabe/deps/root/lib/libfl.a
+addlib ../openabe/deps/root/lib/libgmp.a
+addlib ../openabe/deps/root/lib/libgmpxx.a
 addlib ../openabe/deps/root/lib/libcrypto.a
 addlib ../openabe/deps/root/lib/librelic_s.a
 addlib ../openabe/deps/root/lib/librelic_s_ec.a
 addlib ../openabe/deps/root/lib/libssl.a
 
 * Add OpenABE .a
-* IMPORTANT => "libopenabe.a" and "libzsym.a" must be
-* added AFTER "libwrapperNoDeps.a". Otherwise, the build
-* process seems to work fine, the library will run but
-* some functions will have runtime errors (e.g., decrypt)
 addlib ../openabe/root/lib/libopenabe.a
 addlib ../openabe/root/lib/libzsym.a
 

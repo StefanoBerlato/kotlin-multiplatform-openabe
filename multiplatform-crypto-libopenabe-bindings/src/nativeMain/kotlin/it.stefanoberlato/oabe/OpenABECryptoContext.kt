@@ -143,12 +143,12 @@ actual class OpenABECryptoContext actual constructor(
     }
 
     actual fun enableKeyManager(
-        userId: String
+        userID: String
     ) {
         checkPreconditions()
         libwrapper.openABECryptoContext_enableKeyManager(
             m = context.ptr,
-            userId = userId
+            userId = userID
         )
     }
 

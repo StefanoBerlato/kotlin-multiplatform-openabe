@@ -7,6 +7,7 @@ import java.io.File
 import java.lang.RuntimeException
 
 actual object LibopenabeInitializer {
+    private var isLibraryLoaded = false
     private var isPlatformInitialized = false
 
     private fun loadLibrary() : JnaLibopenabeInterface {
@@ -74,7 +75,10 @@ actual object LibopenabeInitializer {
     lateinit var openabeJna : JnaLibopenabeInterface
     actual suspend fun initialize() {
         if (!isPlatformInitialized) {
-            openabeJna = loadLibrary()
+            if (!isLibraryLoaded) {
+                openabeJna = loadLibrary()
+                isLibraryLoaded = true
+            }
             openabeJna.InitializeOpenABE()
             isPlatformInitialized = true
         }
@@ -82,14 +86,28 @@ actual object LibopenabeInitializer {
 
     actual fun initializeWithCallback(callback: () -> Unit) {
         if (!isPlatformInitialized) {
-            openabeJna = loadLibrary()
+            if (!isLibraryLoaded) {
+                openabeJna = loadLibrary()
+                isLibraryLoaded = true
+            }
             openabeJna.InitializeOpenABE()
             isPlatformInitialized = true
         }
         callback()
     }
 
-    actual fun isInitialized(): Boolean {
+    actual suspend fun shutdown() {
+        if (isPlatformInitialized) {
+            openabeJna.ShutdownOpenABE()
+            isPlatformInitialized = false
+        }
+    }
+
+    actual fun isLibraryLoadedYet(): Boolean {
+        return isLibraryLoaded
+    }
+
+    actual fun isPlatformInitializedYet(): Boolean {
         return isPlatformInitialized
     }
 }

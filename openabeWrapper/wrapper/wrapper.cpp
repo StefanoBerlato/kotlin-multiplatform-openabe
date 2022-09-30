@@ -79,11 +79,11 @@ void openABECryptoContext_generateParams(
 
 void openABECryptoContext_enableKeyManager(
     openABECryptoContext_t *m,
-    const char * userId
+    const char * userID
 ) {
 	OpenABECryptoContext *obj;
 	obj = static_cast<OpenABECryptoContext *>(m->obj);
-	obj->enableKeyManager(userId);
+	obj->enableKeyManager(userID);
 }
 
 void openABECryptoContext_enableVerbose(
@@ -142,7 +142,7 @@ const char * openABECryptoContext_decryptWithKeyID(
 	} catch (const ZCryptoBoxException& ex) {
         errorCode[0] = ABEDecryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("ABE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = ABEDecryptionError;
          return strdup("ABE decryptWithKeyID: unknown exception");
@@ -172,7 +172,7 @@ const char * openABECryptoContext_decrypt(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = ABEDecryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("ABE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = ABEDecryptionError;
          return strdup("ABE decrypt: unknown exception");
@@ -216,7 +216,7 @@ const char * openABECryptoContext_exportUserKey(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = ABEExportKeyError;
         string exceptionMessage(ex.what());
-        return strdup(("ABE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("ABE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = ABEExportKeyError;
          return strdup("ABE exportUserKey: unknown exception");
@@ -367,7 +367,7 @@ const char * openPKEContext_exportPublicKey(
   	} catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKEExportKeyError;
         string exceptionMessage(ex.what());
-        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
         errorCode[0] = PKEExportKeyError;
         return strdup("PKE exportPublicKey: unknown exception");
@@ -389,7 +389,7 @@ const char * openPKEContext_exportPrivateKey(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKEExportKeyError;
         string exceptionMessage(ex.what());
-        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
         errorCode[0] = PKEExportKeyError;
         return strdup("PKE exportPrivateKey: unknown exception");
@@ -448,7 +448,7 @@ const char * openPKEContext_encrypt(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKEEncryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = PKEEncryptionError;
          return strdup("PKE encrypt: unknown exception");
@@ -478,7 +478,7 @@ const char * openPKEContext_decrypt(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKEDecryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("PKE ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKE ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
         errorCode[0] = PKEDecryptionError;
         return strdup("PKE decrypt: unknown exception");
@@ -533,7 +533,7 @@ const char * openABESymKeyHandleImpl_encrypt(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = SymEncryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("Sym ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("Sym ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = SymEncryptionError;
          return strdup("Sym encrypt: unknown exception");
@@ -557,7 +557,7 @@ const char * openABESymKeyHandleImpl_decrypt(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = SymDecryptionError;
         string exceptionMessage(ex.what());
-        return strdup(("Sym ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("Sym ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = SymDecryptionError;
          return strdup("Sym decrypt: unknown exception");
@@ -650,7 +650,7 @@ const char * openPKSIGContext_exportPublicKey(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKSIGExportKeyError;
         string exceptionMessage(ex.what());
-        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKSIG ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
         errorCode[0] = PKSIGExportKeyError;
         return strdup("PKSIG exportPrivateKey: unknown exception");
@@ -674,7 +674,7 @@ const char * openPKSIGContext_exportPrivateKey(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKSIGExportKeyError;
         string exceptionMessage(ex.what());
-        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKSIG ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
         errorCode[0] = PKSIGExportKeyError;
         return strdup("PKSIG exportPrivateKey: unknown exception");
@@ -728,7 +728,7 @@ const char * openPKSIGContext_sign(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKSIGSignError;
         string exceptionMessage(ex.what());
-        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKSIG ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = PKSIGSignError;
          return strdup("PKSIG sign: unknown exception");
@@ -759,7 +759,7 @@ const char * openPKSIGContext_verify(
     } catch (const ZCryptoBoxException& ex) {
         errorCode[0] = PKSIGVerifyError;
         string exceptionMessage(ex.what());
-        return strdup(("PKSIG ZCryptoBoxException:" + exceptionMessage).c_str());
+        return strdup(("PKSIG ZCryptoBoxException: " + exceptionMessage).c_str());
     } catch (...) {
          errorCode[0] = PKSIGVerifyError;
          return strdup("PKSIG verify: unknown exception");

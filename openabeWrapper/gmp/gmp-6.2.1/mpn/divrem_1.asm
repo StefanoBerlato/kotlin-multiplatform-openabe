@@ -1,1 +1,0 @@
-../mpn/x86_64/core2/divrem_1.asm

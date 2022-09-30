@@ -14,10 +14,8 @@ class OpenABESymKeyHandleImplTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-        if (!LibopenabeInitializer.isInitialized()) {
-            testBlocking {
-                LibopenabeInitializer.initialize()
-            }
+        testBlocking {
+            LibopenabeInitializer.initialize()
         }
         key = Zsymcrypto.generateSymmetricKey(32)
         osym = OpenABESymKeyHandleImpl(key!!)
@@ -26,6 +24,9 @@ class OpenABESymKeyHandleImplTest {
     @AfterTest
     fun tearDown() {
         osym!!.destroy()
+        testBlocking {
+            LibopenabeInitializer.shutdown()
+        }
     }
 
     @Test
@@ -99,6 +100,6 @@ class OpenABESymKeyHandleImplTest {
     @Test
     fun `export raw key works`() {
         val exportedRawKey = osym!!.exportRawKey()
-        assertEquals(exportedRawKey, key!!.decodeToString())
+        assertEquals(key!!.decodeToString(), exportedRawKey)
     }
 }

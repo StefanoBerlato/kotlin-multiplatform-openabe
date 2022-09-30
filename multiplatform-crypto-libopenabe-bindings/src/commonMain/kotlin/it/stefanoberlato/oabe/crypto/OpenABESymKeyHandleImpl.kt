@@ -47,6 +47,8 @@ expect class OpenABESymKeyHandleImplObject
  * This is a wrapper class exposing the
  * functionalities of the corresponding
  * OpenABESymKeyHandleImpl class in OpenABE.
+ * [keyBytes] are the bytes of the symmetric key
+ * (e.g., generated with Zsymcrypto.generateSymmetricKey)
  * If you do not have a good reason, leave
  * the [applyB64Encode] argument to 'true'
  */
@@ -63,7 +65,9 @@ expect class OpenABESymKeyHandleImpl(
     //      OpenABEByteString& authData,
     //      bool apply_b64_encode = false);
     //  """
-
+    /**
+     * The (handle to the symmetric key object) context
+     */
     val context: OpenABESymKeyHandleImplObject
 
     /**
@@ -72,17 +76,36 @@ expect class OpenABESymKeyHandleImpl(
      */
     var destroyed: Boolean
 
+    /**
+     * Destroy the context and free the memory
+     */
     fun destroy()
 
+    /**
+     * Decrypt the [plaintext] with the
+     * symmetric key given during the creation
+     * of the context and return the ciphertext
+     */
     fun encrypt(
         plaintext: String
     ): String
 
+    /**
+     * Decrypt the [ciphertext] with the
+     * symmetric key given during the creation
+     * of the context and return the plaintext
+     */
     fun decrypt(
         ciphertext: String
     ): String
 
+    /**
+     * Export the (raw) symmetric key
+     */
     fun exportRawKey(): String
 
+    /**
+     * Export the symmetric key
+     */
     fun exportKey(): String
 }

@@ -13,10 +13,8 @@ class OpenABECryptoContextTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-        if (!LibopenabeInitializer.isInitialized()) {
-            testBlocking {
-                LibopenabeInitializer.initialize()
-            }
+        testBlocking {
+            LibopenabeInitializer.initialize()
         }
         oabe = OpenABECryptoContext(SchemeID.CP_ABE)
         oabe!!.enableVerbose()
@@ -26,6 +24,9 @@ class OpenABECryptoContextTest {
     @AfterTest
     fun tearDown() {
         oabe!!.destroy()
+        testBlocking {
+            LibopenabeInitializer.shutdown()
+        }
     }
 
     @Test
@@ -65,14 +66,14 @@ class OpenABECryptoContextTest {
 
     @Test
     fun `decrypt with unauthorized key fails`() {
-        oabe!!.keygen("|attr1", "key1")
+        oabe!!.keygen("|attr1", "key0")
 
         val plaintext = myPlaintext
         val ciphertext = oabe!!.encrypt("attr1 and attr2", plaintext)
 
         var thrown = false
         try {
-            oabe!!.decrypt("key1", ciphertext)
+            oabe!!.decrypt("key0", ciphertext)
         } catch (e: OpenABECryptoContextDecrypt) {
             thrown = true
         }
@@ -196,8 +197,8 @@ class OpenABECryptoContextTest {
     fun `import user key and export user key works`() {
         oabe!!.keygen("|attr1|attr2", "key0")
         val keyBlob0 = oabe!!.exportUserKey("key0")
-        oabe!!.importUserKey("key1", keyBlob0)
-        val keyBlob1 = oabe!!.exportUserKey("key1")
+        oabe!!.importUserKey("key0", keyBlob0)
+        val keyBlob1 = oabe!!.exportUserKey("key0")
         assertEquals(keyBlob0, keyBlob1)
     }
 
@@ -205,14 +206,13 @@ class OpenABECryptoContextTest {
     fun `import user key and delete user key works`() {
         oabe!!.keygen("|attr1|attr2", "key0")
         val keyBlob0 = oabe!!.exportUserKey("key0")
-        oabe!!.importUserKey("key1", keyBlob0)
+        oabe!!.importUserKey("key0", keyBlob0)
         assertTrue(oabe!!.deleteKey("key0"))
-        assertTrue(oabe!!.deleteKey("key1"))
     }
 
     @Test
     fun `enable key manager and delete user key without importing it first works`() {
-        oabe!!.deleteKey("key2")
+        oabe!!.deleteKey("key0")
     }
 
     @Test
@@ -223,9 +223,9 @@ class OpenABECryptoContextTest {
         newOABE.generateParams()
         val mpk2 = newOABE.exportPublicParams()
         val msk2 = newOABE.exportSecretParams()
-        newOABE.destroy()
         assertNotEquals(mpk, mpk2)
         assertNotEquals(msk, msk2)
+        newOABE.destroy()
     }
 
     @Test

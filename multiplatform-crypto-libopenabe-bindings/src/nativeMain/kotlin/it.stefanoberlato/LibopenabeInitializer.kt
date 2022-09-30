@@ -7,7 +7,7 @@ import kotlin.native.concurrent.AtomicInt
 
 actual object LibopenabeInitializer {
 
-    private var isPlatformInitialized : AtomicInt = AtomicInt(0)
+    private var isPlatformInitialized: AtomicInt = AtomicInt(0)
 
     actual suspend fun initialize() {
         if (isPlatformInitialized.compareAndSet(0, 1)) {
@@ -22,7 +22,17 @@ actual object LibopenabeInitializer {
         callback()
     }
 
-    actual fun isInitialized(): Boolean {
+    actual suspend fun shutdown() {
+        if (isPlatformInitialized.compareAndSet(1, 0)) {
+            LibopenabeUtil.shutdownOpenABE()
+        }
+    }
+
+    actual fun isLibraryLoadedYet(): Boolean {
+        return isPlatformInitialized.value != 0
+    }
+
+    actual fun isPlatformInitializedYet(): Boolean {
         return isPlatformInitialized.value != 0
     }
 }
