@@ -40,7 +40,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         LibopenabeInitializer.openabeJna.openABESymKeyHandleImpl_destroy(
             openABESymKeyHandleImplObject = context
         )
-        context.clear()
+        //context.clear() TODO perhaps not necessary
         destroyed = true
     }
 
@@ -54,7 +54,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
             plaintext = plaintext,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToCiphertext)
+        val returnedValue = freeAndReturn(pointerToCiphertext)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.SymEncryptionError -> throw OpenABESymKeyHandleImplEncrypt(returnedValue)
@@ -72,7 +72,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
             ciphertext = ciphertext,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToPlaintext)
+        val returnedValue = freeAndReturn(pointerToPlaintext)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.SymDecryptionError -> throw OpenABESymKeyHandleImplDecrypt(returnedValue)
@@ -85,7 +85,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         val pointerToKey = LibopenabeInitializer.openabeJna.openABESymKeyHandleImpl_exportRawKey(
             openABESymKeyHandleImplObject = context,
         )
-        return cloneDeallocAndReturn(pointerToKey)
+        return freeAndReturn(pointerToKey)
     }
 
     actual fun exportKey(): String {
@@ -93,7 +93,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         val pointerToKey = LibopenabeInitializer.openabeJna.openABESymKeyHandleImpl_exportKey(
             openABESymKeyHandleImplObject = context,
         )
-        return cloneDeallocAndReturn(pointerToKey)
+        return freeAndReturn(pointerToKey)
     }
 
     private fun checkPreconditions(
@@ -104,9 +104,9 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         }
     }
 
-    private fun cloneDeallocAndReturn(pointer: PointerTypeString) : String {
-        val clonedString = "" + pointer.string
+    private fun freeAndReturn(pointer: PointerTypeString) : String {
+        val string = pointer.string
         pointer.free()
-        return clonedString
+        return string
     }
 }

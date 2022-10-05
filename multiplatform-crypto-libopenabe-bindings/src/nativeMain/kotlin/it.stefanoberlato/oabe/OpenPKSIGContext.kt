@@ -1,6 +1,6 @@
 package it.stefanoberlato.oabe
 
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 import kotlinx.cinterop.*
 
 actual typealias OpenPKSIGContextObject = cnames.structs.openPKSIGContext
@@ -48,7 +48,7 @@ actual class OpenPKSIGContext actual constructor(
                 message = message,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToSignature!!)
+            val returnedValue = freeAndReturn(pointerToSignature!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKSIGSignError -> throw OpenPKSIGContextSign(returnedValue)
@@ -71,7 +71,7 @@ actual class OpenPKSIGContext actual constructor(
                 signature = signature,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToMessage!!)
+            val returnedValue = freeAndReturn(pointerToMessage!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> { }
                 State.PKSIGVerifyError -> throw OpenPKSIGContextVerify(returnedValue)
@@ -90,7 +90,7 @@ actual class OpenPKSIGContext actual constructor(
                 keyID = keyID,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            val returnedValue = freeAndReturn(pointerToKey!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKSIGExportKeyError -> throw OpenPKSIGContextExportKey(returnedValue)
@@ -109,7 +109,7 @@ actual class OpenPKSIGContext actual constructor(
                 keyID = keyID,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            val returnedValue = freeAndReturn(pointerToKey!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKSIGExportKeyError -> throw OpenPKSIGContextExportKey(returnedValue)

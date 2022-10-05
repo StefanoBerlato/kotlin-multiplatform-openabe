@@ -22,9 +22,9 @@ actual object LibopenabeUtil {
         libwrapper.AssertLibInit()
     }
 
-    fun cloneDeallocAndReturn(pointer: CPointer<ByteVar /* = ByteVarOf<Byte> */>) : String {
-        val clonedString = "" + pointer.toKString()
+    fun freeAndReturn(pointer: CPointer<ByteVar /* = ByteVarOf<Byte> */>) : String {
+        val string = pointer.toKString()
         libwrapper.freeString(pointer)
-        return clonedString
+        return string
     }
 }

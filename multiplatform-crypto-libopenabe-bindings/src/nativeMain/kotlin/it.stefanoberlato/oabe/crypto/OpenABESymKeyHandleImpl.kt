@@ -1,6 +1,6 @@
 package it.stefanoberlato.oabe.crypto
 
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 import it.stefanoberlato.oabe.State
 import kotlinx.cinterop.*
 
@@ -38,7 +38,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
                 plaintext = plaintext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToCiphertext!!)
+            val returnedValue = freeAndReturn(pointerToCiphertext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.SymEncryptionError -> throw OpenABESymKeyHandleImplEncrypt(returnedValue)
@@ -57,7 +57,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
+            val returnedValue = freeAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.SymDecryptionError -> throw OpenABESymKeyHandleImplDecrypt(returnedValue)
@@ -71,7 +71,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         val pointerToKey = libwrapper.openABESymKeyHandleImpl_exportRawKey(
             m = context.ptr,
         )
-        return cloneDeallocAndReturn(pointerToKey!!)
+        return freeAndReturn(pointerToKey!!)
     }
 
     actual fun exportKey(): String {
@@ -79,7 +79,7 @@ actual class OpenABESymKeyHandleImpl actual constructor(
         val pointerToKey = libwrapper.openABESymKeyHandleImpl_exportKey(
             m = context.ptr,
         )
-        return cloneDeallocAndReturn(pointerToKey!!)
+        return freeAndReturn(pointerToKey!!)
     }
 
     private fun checkPreconditions(

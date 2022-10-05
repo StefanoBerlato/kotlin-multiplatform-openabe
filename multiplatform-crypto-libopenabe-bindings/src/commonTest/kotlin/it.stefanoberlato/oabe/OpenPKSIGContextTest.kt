@@ -21,7 +21,6 @@ class OpenPKSIGContextTest {
 
     @AfterTest
     fun tearDown() {
-        osig!!.destroy()
         testBlocking {
             LibopenabeInitializer.shutdown()
         }

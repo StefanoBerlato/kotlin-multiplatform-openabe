@@ -1,6 +1,6 @@
 package it.stefanoberlato.oabe
 
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 import kotlinx.cinterop.*
 
 actual typealias OpenPKEContextObject = cnames.structs.openPKEContext
@@ -50,7 +50,7 @@ actual class OpenPKEContext actual constructor(
                 plaintext = plaintext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToCiphertext!!)
+            val returnedValue = freeAndReturn(pointerToCiphertext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKEEncryptionError -> throw OpenPKEContextEncrypt(returnedValue)
@@ -71,7 +71,7 @@ actual class OpenPKEContext actual constructor(
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
+            val returnedValue = freeAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKEDecryptionError -> throw OpenPKEContextDecrypt(returnedValue)
@@ -90,7 +90,7 @@ actual class OpenPKEContext actual constructor(
                 keyID = keyID,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            val returnedValue = freeAndReturn(pointerToKey!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKEExportKeyError -> throw OpenPKEContextExportKey(returnedValue)
@@ -109,7 +109,7 @@ actual class OpenPKEContext actual constructor(
                 keyID = keyID,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            val returnedValue = freeAndReturn(pointerToKey!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.PKEExportKeyError -> throw OpenPKEContextExportKey(returnedValue)

@@ -9,7 +9,7 @@ cd wrapper
 rm *.so *.a *.o
 
 # Compile the wrapper to object file, no linking
-gcc -Wall -c wrapper.cpp -I../openabe/deps/root/include -I../openabe/root/include
+gcc -Wall -c wrapper.cpp -I../openabe/deps/root/include -I../openabe/root/include #-fPIC
 
 # Create a static library out of the object file
 ar rvs libwrapperNoDeps.a wrapper.o
@@ -18,7 +18,7 @@ ar rvs libwrapperNoDeps.a wrapper.o
 ar -M <script.mri
 
 # Create a shared library out of the object file
-gcc -Wall -shared -o libwrapper.so wrapper.o
+gcc -Wall -shared -o libwrapper.so wrapper.o #-fPIC
 
 echo "End of make wrapper Linux x86_64 script"
 

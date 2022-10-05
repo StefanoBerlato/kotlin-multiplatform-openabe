@@ -21,9 +21,9 @@ actual object LibopenabeUtil {
         openabeJna.AssertLibInit()
     }
 
-    fun cloneDeallocAndReturn(pointer: PointerTypeString) : String {
-        val clonedString = "" + pointer.string
+    fun freeAndReturn(pointer: PointerTypeString) : String {
+        val string = pointer.string
         pointer.free()
-        return clonedString
+        return string
     }
 }

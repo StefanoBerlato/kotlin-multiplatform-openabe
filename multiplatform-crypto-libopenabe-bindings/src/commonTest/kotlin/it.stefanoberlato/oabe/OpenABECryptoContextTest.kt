@@ -2,6 +2,9 @@ package it.stefanoberlato.oabe
 
 import it.stefanoberlato.LibopenabeInitializer
 import it.stefanoberlato.testBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
 import kotlin.test.*
 
@@ -13,20 +16,19 @@ class OpenABECryptoContextTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-        testBlocking {
-            LibopenabeInitializer.initialize()
-        }
-        oabe = OpenABECryptoContext(SchemeID.CP_ABE)
-        oabe!!.enableVerbose()
-        oabe!!.generateParams()
+//        testBlocking {
+//            LibopenabeInitializer.initialize()
+//        }
+//        oabe = OpenABECryptoContext(SchemeID.CP_ABE)
+//        oabe!!.enableVerbose()
+//        oabe!!.generateParams()
     }
 
     @AfterTest
     fun tearDown() {
-        oabe!!.destroy()
-        testBlocking {
-            LibopenabeInitializer.shutdown()
-        }
+//        testBlocking {
+//            LibopenabeInitializer.shutdown()
+//        }
     }
 
     @Test
@@ -51,7 +53,6 @@ class OpenABECryptoContextTest {
         } catch (e: OpenABECryptoContextMissingParameters) {
             thrown = true
         }
-        newOABE.destroy()
         assertTrue(thrown)
     }
 
@@ -225,7 +226,6 @@ class OpenABECryptoContextTest {
         val msk2 = newOABE.exportSecretParams()
         assertNotEquals(mpk, mpk2)
         assertNotEquals(msk, msk2)
-        newOABE.destroy()
     }
 
     @Test
@@ -237,7 +237,6 @@ class OpenABECryptoContextTest {
         newOABE.importSecretParams(msk)
         val mpk2 = newOABE.exportPublicParams()
         val msk2 = newOABE.exportSecretParams()
-        newOABE.destroy()
         assertEquals(mpk, mpk2)
         assertEquals(msk, msk2)
     }

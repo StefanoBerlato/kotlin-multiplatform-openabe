@@ -3,7 +3,7 @@ package it.stefanoberlato.oabe
 import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
 import it.stefanoberlato.LibopenabeInitializer
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 
 actual class OpenPKSIGContextObject : Structure() {
 
@@ -38,7 +38,7 @@ actual class OpenPKSIGContext actual constructor(
         LibopenabeInitializer.openabeJna.openPKSIGContext_destroy(
             openPKSIGContextObject = context
         )
-        context.clear()
+        //context.clear() TODO perhaps not necessary
         destroyed = true
     }
 
@@ -64,7 +64,7 @@ actual class OpenPKSIGContext actual constructor(
             message = message,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToSignature)
+        val returnedValue = freeAndReturn(pointerToSignature)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKSIGSignError -> throw OpenPKSIGContextSign(returnedValue)
@@ -86,7 +86,7 @@ actual class OpenPKSIGContext actual constructor(
             signature = signature,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToPlaintext)
+        val returnedValue = freeAndReturn(pointerToPlaintext)
         when (State.fromInt(errorCode[0])) {
             State.Success -> { }
             State.PKSIGVerifyError -> throw OpenPKSIGContextVerify(returnedValue)
@@ -104,7 +104,7 @@ actual class OpenPKSIGContext actual constructor(
             keyID = keyID,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToKey)
+        val returnedValue = freeAndReturn(pointerToKey)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKSIGExportKeyError -> throw OpenPKSIGContextExportKey(returnedValue)
@@ -122,7 +122,7 @@ actual class OpenPKSIGContext actual constructor(
             keyID = keyID,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToKey)
+        val returnedValue = freeAndReturn(pointerToKey)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKSIGExportKeyError -> throw OpenPKSIGContextExportKey(returnedValue)

@@ -74,7 +74,6 @@ The OpenABE library is build from sources at [this forked repository](https://gi
 
 
 ## Open Questions:
-* the `multiplatform-crypto-api` module should be needed just "to get kotlin to download appropriate konan tools". In what sense? How is it used?
 * what is the purpose of the `multiplatform-crypto-libopenabe-bindings/src/jvmSpecific` folder and the empty `JvmOpenabeWrapper.kt` (that originally was `JvmSodiumWrapper.kt`) file?
 
 

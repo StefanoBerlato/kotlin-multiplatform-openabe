@@ -1,7 +1,7 @@
 package it.stefanoberlato.oabe.crypto
 
 import it.stefanoberlato.LibopenabeInitializer
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 
 actual object Zsymcrypto {
 
@@ -18,6 +18,6 @@ actual object Zsymcrypto {
         val pointerToKeyAsHex = LibopenabeInitializer.openabeJna.zsymcrypto_printAsHex(
             binBuf = binBuf,
         )
-        return cloneDeallocAndReturn(pointerToKeyAsHex)
+        return freeAndReturn(pointerToKeyAsHex)
     }
 }

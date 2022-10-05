@@ -21,7 +21,6 @@ class OpenPKEContextTest {
 
     @AfterTest
     fun tearDown() {
-        opke!!.destroy()
         testBlocking {
             LibopenabeInitializer.shutdown()
         }

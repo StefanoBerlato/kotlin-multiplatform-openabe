@@ -75,9 +75,6 @@ LibopenabeInitializer.initializeWithCallback {
 
     assertEquals(plaintext, decrypted)
 
-    /** Destroy the context to free allocated memory*/
-    oabe.destroy()
-
     /** Shutdown the library to free allocated memory*/
     shutdownOpenABE()
 }

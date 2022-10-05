@@ -15,6 +15,9 @@ cd openabeWrapper
 # Build the wrapper for Linux x86_64
 ./makeWrapperLinuxX86-64.sh
 
+# Create resources folder if not exists
+mkdir -p ../multiplatform-crypto-libopenabe-bindings/src/jvmMain/resources
+
 # Copy the .so libraries in the JVM resources folder
 cp wrapper/libwrapper.so ../multiplatform-crypto-libopenabe-bindings/src/jvmMain/resources/dynamic-linux-x86-64-libwrapper.so
 cp openabe/root/lib/libopenabe.so ../multiplatform-crypto-libopenabe-bindings/src/jvmMain/resources/dynamic-linux-x86-64-libopenabe.so

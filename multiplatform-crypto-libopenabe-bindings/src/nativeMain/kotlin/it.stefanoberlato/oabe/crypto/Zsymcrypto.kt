@@ -1,8 +1,7 @@
 package it.stefanoberlato.oabe.crypto
 
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 import kotlinx.cinterop.readBytes
-import kotlinx.cinterop.toCValues
 
 actual object Zsymcrypto {
 
@@ -19,6 +18,6 @@ actual object Zsymcrypto {
         val pointerToKeyAsHex = libwrapper.zsymcrypto_printAsHex(
             binBuf = binBuf,
         )
-        return cloneDeallocAndReturn(pointerToKeyAsHex!!)
+        return freeAndReturn(pointerToKeyAsHex!!)
     }
 }

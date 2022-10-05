@@ -1,6 +1,6 @@
 package it.stefanoberlato.oabe
 
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 import kotlinx.cinterop.*
 
 actual typealias OpenABECryptoContextObject = cnames.structs.openABECryptoContext
@@ -64,7 +64,7 @@ actual class OpenABECryptoContext actual constructor(
             encInput = encInput,
             plaintext = plaintext
         )
-        return cloneDeallocAndReturn(pointerToCiphertext!!)
+        return freeAndReturn(pointerToCiphertext!!)
     }
 
     actual fun decrypt(
@@ -77,7 +77,7 @@ actual class OpenABECryptoContext actual constructor(
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
+            val returnedValue = freeAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
@@ -98,7 +98,7 @@ actual class OpenABECryptoContext actual constructor(
                 ciphertext = ciphertext,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToPlaintext!!)
+            val returnedValue = freeAndReturn(pointerToPlaintext!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.ABEDecryptionError -> throw OpenABECryptoContextDecrypt(returnedValue)
@@ -112,7 +112,7 @@ actual class OpenABECryptoContext actual constructor(
         val pointerToParams = libwrapper.openABECryptoContext_exportPublicParams(
             m = context.ptr
         )
-        return cloneDeallocAndReturn(pointerToParams!!)
+        return freeAndReturn(pointerToParams!!)
     }
 
     actual fun exportSecretParams(): String {
@@ -120,7 +120,7 @@ actual class OpenABECryptoContext actual constructor(
         val pointerToParams = libwrapper.openABECryptoContext_exportSecretParams(
             m = context.ptr
         )
-        return cloneDeallocAndReturn(pointerToParams!!)
+        return freeAndReturn(pointerToParams!!)
     }
 
     actual fun exportUserKey(
@@ -133,7 +133,7 @@ actual class OpenABECryptoContext actual constructor(
                 keyID = keyID,
                 errorCode = pinned.addressOf(0)
             )
-            val returnedValue = cloneDeallocAndReturn(pointerToKey!!)
+            val returnedValue = freeAndReturn(pointerToKey!!)
             when (State.fromInt(pinned.get()[0])) {
                 State.Success -> returnedValue
                 State.ABEExportKeyError -> throw OpenABECryptoContextExportKey(returnedValue)

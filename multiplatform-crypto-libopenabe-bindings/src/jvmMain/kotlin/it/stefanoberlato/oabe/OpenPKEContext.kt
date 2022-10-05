@@ -3,7 +3,7 @@ package it.stefanoberlato.oabe
 import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
 import it.stefanoberlato.LibopenabeInitializer
-import it.stefanoberlato.oabe.LibopenabeUtil.cloneDeallocAndReturn
+import it.stefanoberlato.oabe.LibopenabeUtil.freeAndReturn
 
 actual class OpenPKEContextObject : Structure() {
 
@@ -38,7 +38,7 @@ actual class OpenPKEContext actual constructor(
         LibopenabeInitializer.openabeJna.openPKEContext_destroy(
             openPKEContextObject = context
         )
-        context.clear()
+        //context.clear() TODO perhaps not necessary
         destroyed = true
     }
 
@@ -64,7 +64,7 @@ actual class OpenPKEContext actual constructor(
             plaintext = plaintext,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToCiphertext)
+        val returnedValue = freeAndReturn(pointerToCiphertext)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKEEncryptionError -> throw OpenPKEContextEncrypt(returnedValue)
@@ -84,7 +84,7 @@ actual class OpenPKEContext actual constructor(
             ciphertext = ciphertext,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToPlaintext)
+        val returnedValue = freeAndReturn(pointerToPlaintext)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKEDecryptionError -> throw OpenPKEContextDecrypt(returnedValue)
@@ -102,7 +102,7 @@ actual class OpenPKEContext actual constructor(
             keyID = keyID,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToKey)
+        val returnedValue = freeAndReturn(pointerToKey)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKEExportKeyError -> throw OpenPKEContextExportKey(returnedValue)
@@ -120,7 +120,7 @@ actual class OpenPKEContext actual constructor(
             keyID = keyID,
             errorCode = errorCode
         )
-        val returnedValue = cloneDeallocAndReturn(pointerToKey)
+        val returnedValue = freeAndReturn(pointerToKey)
         return when (State.fromInt(errorCode[0])) {
             State.Success -> returnedValue
             State.PKEExportKeyError -> throw OpenPKEContextExportKey(returnedValue)

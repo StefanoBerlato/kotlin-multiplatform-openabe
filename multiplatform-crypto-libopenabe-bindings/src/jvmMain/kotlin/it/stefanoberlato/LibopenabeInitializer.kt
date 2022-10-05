@@ -4,13 +4,13 @@ import com.goterl.resourceloader.SharedLibraryLoader
 import com.sun.jna.Native
 import com.sun.jna.Platform
 import java.io.File
-import java.lang.RuntimeException
+
 
 actual object LibopenabeInitializer {
     private var isLibraryLoaded = false
     private var isPlatformInitialized = false
 
-    private fun loadLibrary() : JnaLibopenabeInterface {
+    fun loadLibrary() : JnaLibopenabeInterface { // TODO make this function private
         val libraryFile = when {
             Platform.isMac() -> {
                 //SharedLibraryLoader.get().load("dynamic-macos.dylib", JnaLibopenabeInterface::class.java)
@@ -58,19 +58,19 @@ actual object LibopenabeInitializer {
             else -> throw RuntimeException("Unknown platform")
         }
 
-        val library = if (Platform.isAndroid()) {
+        val syncLibrary = if (Platform.isAndroid()) {
             //Native.load("openabe", JnaLibopenabeInterface::class.java) as JnaLibopenabeInterface
             throw RuntimeException("Unsupported platform") // TODO add support
         } else {
-            Native.load(
+            val library = Native.load(
                 libraryFile.absolutePath,
                 JnaLibopenabeInterface::class.java
-            ) as JnaLibopenabeInterface
+            )
+            Native.synchronizedLibrary(library) as JnaLibopenabeInterface
         }
 
-        return library
+        return syncLibrary
     }
-
 
     lateinit var openabeJna : JnaLibopenabeInterface
     actual suspend fun initialize() {

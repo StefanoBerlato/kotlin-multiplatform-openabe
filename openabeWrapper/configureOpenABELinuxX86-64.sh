@@ -4,7 +4,7 @@ echo "Start of configure OpenABE Linux x86_64 script"
 
 # Install dependencies for building OpenABE
 sudo apt -y update
-sudo apt -y install bison lsb-release git sudo python3-pip nano libgtest-dev -y
+sudo apt -y install bison lsb-release git sudo python3-pip nano libgtest-dev curl autopoint gettext -y
 
 # Manually install gtest (see https://github.com/zeutro/openabe/issues/61#issuecomment-868751392)
 cd ~
