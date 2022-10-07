@@ -32,6 +32,7 @@ class OpenABESymKeyHandleImplTest {
     fun `invoke any function after destroy fails`() {
         val newKey = Zsymcrypto.generateSymmetricKey(32)
         val newOsym = OpenABESymKeyHandleImpl(newKey)
+        newOsym.destroy()
         var thrown = false
         try {
             newOsym.exportKey()

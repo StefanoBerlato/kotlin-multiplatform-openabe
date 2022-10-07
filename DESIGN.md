@@ -70,15 +70,16 @@ The OpenABE library is build from sources at [this forked repository](https://gi
   changes in deps/relic/Makefile:
   - "VERSION=toolkit-0.5.0" => "VERSION=toolkit-0.6.0"
   - "-DFP_METHD="BASIC;COMBA;COMBA;MONTY;LOWER;SLIDE"" => "-DFP_METHD="BASIC;COMBA;COMBA;MONTY;MONTY;JMPDS;SLIDE""
+  - "-DMULTI=PTHREAD" => "-DMULTI="
   ```
 
 
-## Open Questions:
-* what is the purpose of the `multiplatform-crypto-libopenabe-bindings/src/jvmSpecific` folder and the empty `JvmOpenabeWrapper.kt` (that originally was `JvmSodiumWrapper.kt`) file?
+## Open Questions
+1. What is the purpose of the `multiplatform-crypto-libopenabe-bindings/src/jvmSpecific` folder and the empty `JvmOpenabeWrapper.kt` (that originally was `JvmSodiumWrapper.kt`) file?
+2. After having built the bindings and when testing them, we would get a `SIGSEGV` located in the Relic library whenever we invoked the library from a JVM thread other than the one I first loaded (actually, initialized) the library with. Replacing `-DMULTI=PTHREAD` with `-DMULTI=` in the `deps/relic/Makefile` file solves this issue, but we need to investigate the reason behind this weird behaviour.
 
 
 ## TODOs:
-* Need to revise (the version of) Relic
 * Complete bindings and exposed APIs;
 * Add support for other targets (native, Android, JS);
 

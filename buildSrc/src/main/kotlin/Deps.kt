@@ -11,7 +11,7 @@ object Versions {
 
 object ReleaseInfo {
     const val group = "it.stefanoberlato"
-    const val bindingsVersion = "0.0.15-SNAPSHOT"
+    const val bindingsVersion = "0.0.20-SNAPSHOT"
 }
 
 object Deps {

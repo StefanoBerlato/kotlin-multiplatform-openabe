@@ -16,19 +16,19 @@ class OpenABECryptoContextTest {
 
     @BeforeTest
     fun initializeLibraryAndContext() {
-//        testBlocking {
-//            LibopenabeInitializer.initialize()
-//        }
-//        oabe = OpenABECryptoContext(SchemeID.CP_ABE)
-//        oabe!!.enableVerbose()
-//        oabe!!.generateParams()
+        testBlocking {
+            LibopenabeInitializer.initialize()
+        }
+        oabe = OpenABECryptoContext(SchemeID.CP_ABE)
+        oabe!!.enableVerbose()
+        oabe!!.generateParams()
     }
 
     @AfterTest
     fun tearDown() {
-//        testBlocking {
-//            LibopenabeInitializer.shutdown()
-//        }
+        testBlocking {
+            LibopenabeInitializer.shutdown()
+        }
     }
 
     @Test
